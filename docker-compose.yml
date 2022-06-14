@@ -32,8 +32,9 @@ services:
       - 9003:9000
     restart: unless-stopped
     volumes:
-      - ./src:/var/www/backend
-      - ./src/vendor:/var/www/backend/vendor
+      - ./.git:/var/www/.git
+      - ./src:/var/www/src
+      - ./src/vendor:/var/www/src/vendor
     networks:
       - fsm-backend
 
