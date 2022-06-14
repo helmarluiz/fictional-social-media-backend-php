@@ -21,7 +21,7 @@ class UserAnalysisModel
         $this->connection = (new MysqlConnect())->connect();
     }
 
-        public function getPaginated(int $page, int $per_page): array
+    public function getPaginated(int $page, int $per_page): array
     {
         try {
             $query = "SELECT
@@ -55,14 +55,16 @@ class UserAnalysisModel
 
             $result = $this->connection->prepare($sql);
 
-            return $result->execute([
+            return $result->execute(
+                [
                 'user_id' => $userAnalysis->user_id,
                 'user_name' => $userAnalysis->user_name,
                 'post_count' => $userAnalysis->post_count,
                 'post_avg_characters' => $userAnalysis->post_avg_characters,
                 'post_months' => $userAnalysis->post_months,
                 'post_longest_id' => $userAnalysis->post_longest_id
-            ]);
+                ]
+            );
         } catch (PDOException $e) {
             Log::error('PDO ERROR:' . $e->getMessage());
             throw new Exception('Error on trying to insert user analysis');
