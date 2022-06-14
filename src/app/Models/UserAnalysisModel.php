@@ -21,7 +21,7 @@ class UserAnalysisModel
         $this->connection = (new MysqlConnect())->connect();
     }
 
-    public function getPaginated(int $page, int $per_page): array
+        public function getPaginated(int $page, int $per_page): array
     {
         try {
             $query = "SELECT
