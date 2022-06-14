@@ -40,6 +40,18 @@ COPY src .
 RUN composer install
 
 # Set permissions to vendor folder
-RUN chown $user:$user /var/www/backend/vendor
+RUN chown $user:$user /var/www/src/vendor
+
+# Copy git file to be used by Captain Hook
+COPY .git/ ./.git/
+
+# Install Captain Hook Manager
+RUN vendor/bin/captainhook install \
+    --no-interaction \
+    --skip-existing \
+    --git-directory="./.git" \
+    --run-mode="docker" \
+    --run-exec="docker exec -w /var/www fsm-backend" \
+    --run-path="src/vendor/bin/captainhook"
 
 USER $user
