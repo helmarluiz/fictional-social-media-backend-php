@@ -18,10 +18,14 @@ class PostsApiTest extends TestCase
 
     public function testGetPosts()
     {
-        $response = $this->httpClient->get('fsm-nginx/api/posts', [
-           'page' => 1,
-           'per_page' => 15,
-        ]);
+        print_r("helmar");
+        $response = $this->httpClient->get(
+            'fsm-nginx/api/posts',
+            [
+                'page' => 1,
+                'per_page' => 15,
+            ]
+        );
 
         $this->assertEquals(200, $response->getStatusCode(), 'Invalid Http Status Code');
         $this->assertArrayHasKey('data', $response->getBodyArray(), 'There is no data attribute.');

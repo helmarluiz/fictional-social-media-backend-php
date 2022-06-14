@@ -36,7 +36,7 @@ class ConfigService
 
 
     /**
-     * @param string $key
+     * @param  string $key
      * @return array|null
      */
     public static function get(string $key): array|null

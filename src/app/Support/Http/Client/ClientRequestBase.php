@@ -15,7 +15,7 @@ class ClientRequestBase implements ClientRequestInterface
     protected int $statusCode;
 
     /**
-     * @param string $requestUrl
+     * @param string     $requestUrl
      * @param array|null $requestParameters
      * @param array|null $requestHeaders
      */
@@ -97,7 +97,7 @@ class ClientRequestBase implements ClientRequestInterface
     }
 
     /**
-     * @param string $body
+     * @param  string $body
      * @return void
      */
     public function setBody(string $body): void

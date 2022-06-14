@@ -128,6 +128,6 @@ class PostModelTest extends TestCase
             $model->insert($dto);
         }
 
-//        $this->assertCount(15, $result, 'Posts were not loaded paginated');
+        //        $this->assertCount(15, $result, 'Posts were not loaded paginated');
     }
 }

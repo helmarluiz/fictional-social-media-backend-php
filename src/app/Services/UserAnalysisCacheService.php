@@ -31,8 +31,8 @@ class UserAnalysisCacheService implements CacheServiceInterface
     }
 
     /**
-     * @param int $page
-     * @param int $perPage
+     * @param  int $page
+     * @param  int $perPage
      * @return array
      * @throws Exception
      */

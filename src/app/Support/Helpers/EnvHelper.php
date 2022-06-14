@@ -7,8 +7,8 @@ namespace App\Support\Helpers;
 class EnvHelper
 {
     /**
-     * @param string $key
-     * @param string $defaultValue
+     * @param  string $key
+     * @param  string $defaultValue
      * @return string
      */
     public static function get(string $key, string $defaultValue): string

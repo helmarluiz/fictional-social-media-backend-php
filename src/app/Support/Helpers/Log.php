@@ -3,21 +3,7 @@
 namespace App\Support\Helpers;
 
 use Exception;
-
-/**
- * Describes log levels.
- */
-class LogLevel
-{
-    const EMERGENCY = 'emergency';
-    const ALERT     = 'alert';
-    const CRITICAL  = 'critical';
-    const ERROR     = 'error';
-    const WARNING   = 'warning';
-    const NOTICE    = 'notice';
-    const INFO      = 'info';
-    const DEBUG     = 'debug';
-}
+use App\Support\Helpers\LogLevelEnumEnum;
 
 define('LOG_FILE', __DIR__ . '/../../../logs/app.log');
 
@@ -29,39 +15,39 @@ class Log
     /* TODO: Implement all PSR-3 Logger Interface methods */
 
     /**
-     * @param string $message
-     * @param array|null $data
+     * @param  string     $message
+     * @param  array|null $data
      * @return void
      */
     public static function info(string $message, ?array $data = [])
     {
-        self::write(LogLevel::INFO, $message, $data);
+        self::write(LogLevelEnum::INFO, $message, $data);
     }
 
     /**
-     * @param string $message
-     * @param array|null $data
+     * @param  string     $message
+     * @param  array|null $data
      * @return void
      */
     public static function debug(string $message, ?array $data = [])
     {
-        self::write(LogLevel::DEBUG, $message, $data);
+        self::write(LogLevelEnum::DEBUG, $message, $data);
     }
 
     /**
-     * @param string $message
-     * @param array|null $data
+     * @param  string     $message
+     * @param  array|null $data
      * @return void
      */
     public static function error(string $message, ?array $data = [])
     {
-        self::write(LogLevel::ERROR, $message, $data);
+        self::write(LogLevelEnum::ERROR, $message, $data);
     }
 
     /**
-     * @param string $level
-     * @param string $message
-     * @param array $data
+     * @param  string $level
+     * @param  string $message
+     * @param  array  $data
      * @return void
      */
     public static function write(string $level, string $message, array $data = [])

@@ -38,7 +38,7 @@ class SupermetricsApiService
     }
 
     /**
-     * @param bool $tokenNotCached
+     * @param  bool $tokenNotCached
      * @return string
      * @throws \JsonException
      */
@@ -49,14 +49,14 @@ class SupermetricsApiService
             return $_SESSION['supermetrics_token'];
         }
 
-         $response = $this->httpClient->post(
-             $this->apiConfig['host'] . '/assignment/register',
-             [
+        $response = $this->httpClient->post(
+            $this->apiConfig['host'] . '/assignment/register',
+            [
                 'client_id' => $this->apiConfig['client_id'],
                 'email' => $this->apiConfig['email'],
                 'name' => $this->apiConfig['name'],
              ]
-         );
+        );
 
         if ($response->getStatusCode() !== 200) {
             throw new Exception('Error while getting token');
@@ -71,7 +71,7 @@ class SupermetricsApiService
     }
 
     /**
-     * @param int $pageNumber
+     * @param  int $pageNumber
      * @return array
      * @throws \JsonException
      */

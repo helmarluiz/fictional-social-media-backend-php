@@ -22,8 +22,8 @@ class PostModel
     }
 
     /**
-     * @param int $page
-     * @param int $per_page
+     * @param  int $page
+     * @param  int $per_page
      * @return array<array>
      * @throws Exception
      */
@@ -59,7 +59,7 @@ class PostModel
     }
 
     /**
-     * @param PostDTO $post
+     * @param  PostDTO $post
      * @return bool
      * @throws Exception
      */
@@ -73,7 +73,8 @@ class PostModel
 
             $result = $this->connection->prepare($sql);
 
-            return $result->execute([
+            return $result->execute(
+                [
                 'id' => $post->id,
                 'user_name' => $post->user_name,
                 'user_id' => $post->user_id,
@@ -81,7 +82,8 @@ class PostModel
                 'message_length' => $post->message_length,
                 'type' => $post->type,
                 'created_time' => $post->created_time
-             ]);
+                ]
+            );
         } catch (PDOException $e) {
             Log::error('PDO ERROR:' . $e->getMessage());
             throw new Exception('Error on trying to insert post');
@@ -138,7 +140,7 @@ class PostModel
     }
 
     /**
-     * @param string $userId
+     * @param  string $userId
      * @return array<array>
      * @throws Exception
      */

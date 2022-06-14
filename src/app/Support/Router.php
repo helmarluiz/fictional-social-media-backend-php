@@ -12,8 +12,8 @@ class Router
     protected static int $countUrlMatches = 0;
 
     /**
-     * @param string $endpoint
-     * @param string $callback
+     * @param  string $endpoint
+     * @param  string $callback
      * @return void
      */
     public static function get(string $endpoint, string $callback): void
