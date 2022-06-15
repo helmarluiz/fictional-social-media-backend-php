@@ -15,6 +15,9 @@ use App\Services\UserAnalysisCacheService;
  * @package App\Commands
  */
 
+print_r("helmar");
+
+
 /* Instantiate cache services */
 $postsCacheService = new PostsCacheService();
 $userAnalysisCacheService = new UserAnalysisCacheService();
