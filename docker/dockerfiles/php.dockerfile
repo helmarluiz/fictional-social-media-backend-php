@@ -14,13 +14,13 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 COPY docker/configs/php/xdebug.ini "${PHP_INI_DIR}/conf.d"
 
 # Install xdebug
-RUN pecl install xdebug
+RUN #pecl install xdebug
 
 # Install PHP extensions
 RUN docker-php-ext-install pdo pdo_mysql
 
 # Enable Xdebug extion
-RUN docker-php-ext-enable xdebug
+RUN #docker-php-ext-enable xdebug
 
 # Get latest Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -43,15 +43,13 @@ RUN composer install
 RUN chown $user:$user /var/www/src/vendor
 
 # Copy git file to be used by Captain Hook
-COPY .git/ ./.git/
+COPY .git .git
 
-# Install Captain Hook Manager
-RUN vendor/bin/captainhook install \
-    --no-interaction \
-    --skip-existing \
-    --git-directory="./.git" \
-    --run-mode="docker" \
-    --run-exec="docker exec -w /var/www fsm-backend" \
-    --run-path="src/vendor/bin/captainhook"
+# Set permissions to .git folder
+RUN chown -R $user:$user .git
+
+# Copy install captainhook shell scrit and set permission
+COPY docker/configs/php/install-captainhook.sh /$user/install-captainhook.sh
+RUN chmod +x /$user/install-captainhook.sh;
 
 USER $user
