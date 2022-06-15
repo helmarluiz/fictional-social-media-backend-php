@@ -3,3 +3,10 @@
 
 # Environments
 .env
+
+# Docker files
+docker/configs/sonarqube/data
+docker/configs/sonarqube/extensions
+docker/configs/sonarqube/logs
+docker/configs/sonarqube/temp
+docker/configs/sonarqube/log
