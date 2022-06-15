@@ -16,32 +16,15 @@
             },
             {
                 "_comment": "Try to fix errors and warnings automatically with phpcbf.",
-                "action": "composer run cs:fix {$STAGED_FILES}",
-                "conditions": [
-                    {
-                        "exec": "\\CaptainHook\\App\\Hook\\Condition\\FileStaged\\OfType",
-                        "args": ["php"]
-                    }
-                ]
+                "action": "composer run cs:fix app tests"
             },
             {
                 "_comment": "Make sure your PHP code doesn't contain any syntax errors.",
-                "action": "composer run cs:lint {$STAGED_FILES}",
-                "conditions": [
-                    {
-                        "exec": "\\CaptainHook\\App\\Hook\\Condition\\FileStaged\\OfType",
-                        "args": ["php"]
-                    }
-                ]
-            }, {
-                "_comment": "Scans the whole codebase to find bugs by  Static Analysis.",
-                "action": "composer run static-analyse",
-                "conditions": [
-                    {
-                        "exec": "\\CaptainHook\\App\\Hook\\Condition\\FileStaged\\OfType",
-                        "args": ["php"]
-                    }
-                ]
+                "action": "composer run cs:lint app tests"
+            },
+            {
+                "_comment": "Scans the whole codebase to find bugs executing static analysis.",
+                "action": "composer run static-analyse"
             }
         ]
     }
