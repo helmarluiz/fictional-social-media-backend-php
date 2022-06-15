@@ -16,7 +16,7 @@ class LoadPostsController
             protected PostModel $postModel;
         protected PostsCacheService $cacheService;
 
-        public function __construct()
+            public function __construct()
     {
         $this->postModel = new PostModel();
         $this->cacheService = new PostsCacheService();
