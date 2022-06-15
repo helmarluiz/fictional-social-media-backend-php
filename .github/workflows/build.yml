@@ -6,15 +6,10 @@ on:
 #  pull_request:
 #    types: [opened, synchronize, reopened]
 jobs:
-  github-actions-environment-variables-ubuntu:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Test
-        run: echo ${{ secrets.SONAR_TOKEN }};  echo ${{ secrets.GITHUB_TOKEN }}
   sonarcloud:
     name: SonarCloud
     runs-on: ubuntu-latest
-    environment: main
+    environment: master
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
