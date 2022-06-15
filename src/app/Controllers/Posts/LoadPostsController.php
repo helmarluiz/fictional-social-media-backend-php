@@ -13,7 +13,7 @@ use http\Params;
 
 class LoadPostsController
 {
-        protected PostModel $postModel;
+            protected PostModel $postModel;
         protected PostsCacheService $cacheService;
 
         public function __construct()
