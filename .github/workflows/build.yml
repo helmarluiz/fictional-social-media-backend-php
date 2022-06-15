@@ -6,6 +6,11 @@ on:
 #  pull_request:
 #    types: [opened, synchronize, reopened]
 jobs:
+  github-actions-environment-variables-ubuntu:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test
+        run: ls -la /github/workspace
   sonarcloud:
     name: SonarCloud
     runs-on: ubuntu-latest
