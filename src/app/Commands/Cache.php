@@ -15,7 +15,6 @@ use App\Services\UserAnalysisCacheService;
  * @package App\Commands
  */
 
-print_r("helmar");
 
 
 /* Instantiate cache services */
