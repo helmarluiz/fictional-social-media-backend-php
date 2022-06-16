@@ -90,7 +90,7 @@ jobs:
           echo ${{ github.event.repository.name }}
           sed -i 's/\/home\/runner\/work\/${{ github.event.repository.name }}\/${{ github.event.repository.name }}\//\/github\/workspace\//g' phpunit.coverage.xml
           sed -i 's/\/home\/runner\/work\/${{ github.event.repository.name }}\/${{ github.event.repository.name }}\//\/github\/workspace\//g' phpunit.junit.xml
-          ls -la ./
+          cat .*
 
       - name: SonarCloud Scan
         run: >
