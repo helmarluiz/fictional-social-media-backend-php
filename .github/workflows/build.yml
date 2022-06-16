@@ -13,34 +13,44 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
-        with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
 
-      - name: Install composer and dependencies
-        uses: php-actions/composer@v6
-        with:
-          args: --working-dir=src
+      - name: change code xdebug mode to coverage
+        run: sed -i 's/=debug/=coverage/g' docker/configs/php/xdebug.ini
 
-      - name: PHPUnit Tests
-        uses: php-actions/phpunit@v3
-        env:
-          XDEBUG_MODE: coverage
-        with:
-          bootstrap: src/vendor/autoload.php
-          php_extensions: xdebug
-          configuration: src/phpunit.xml
-  sonarcloud:
-    name: SonarCloud
-    runs-on: ubuntu-latest
-    environment: master
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - name: Start containers
+        run: docker-compose up -d
 
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
+      - name: Tests
+        run: docker exec -it fsm-backend vendor/bin/phpunit
+        with:
+          name: test-reports
+          path: src/test-reports
+
+#      - name: Install composer and dependencies
+#        uses: php-actions/composer@v6
+#        with:
+#          args: --working-dir=src
+#
+#      - name: PHPUnit Tests
+#        uses: php-actions/phpunit@v3
+#        env:
+#          XDEBUG_MODE: coverage
+#        with:
+#          bootstrap: src/vendor/autoload.php
+#          php_extensions: xdebug
+#          configuration: src/phpunit.xml
+#  sonarcloud:
+#    name: SonarCloud
+#    runs-on: ubuntu-latest
+#    environment: master
+#    env:
+#      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+#      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+#    steps:
+#      - name: Checkout Code
+#        uses: actions/checkout@v2
+#        with:
+#          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+#
+#      - name: SonarCloud Scan
+#        uses: SonarSource/sonarcloud-github-action@master

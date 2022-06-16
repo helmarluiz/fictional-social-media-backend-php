@@ -14,13 +14,13 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 COPY docker/configs/php/xdebug.ini "${PHP_INI_DIR}/conf.d"
 
 # Install xdebug
-RUN #pecl install xdebug
+RUN pecl install xdebug
 
 # Install PHP extensions
 RUN docker-php-ext-install pdo pdo_mysql
 
 # Enable Xdebug extion
-RUN #docker-php-ext-enable xdebug
+RUN docker-php-ext-enable xdebug
 
 # Get latest Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
