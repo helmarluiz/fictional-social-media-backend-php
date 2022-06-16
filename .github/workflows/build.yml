@@ -81,7 +81,7 @@ jobs:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
 
       - name: Create Artifacts
-        uses: actions/upload-artifact@master
+        uses: actions/download-artifact@master
         with:
           name: test-reports
           path: src/test-reports
