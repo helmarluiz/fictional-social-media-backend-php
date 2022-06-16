@@ -15,7 +15,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: change code xdebug mode to coverage
-        run: sed -i 's/=debug/=coverage/g' docker/configs/php/xdebug.ini
+        run: sed -i 's/;xdebug.mode=debug/xdebug.mode=coverage/g' docker/configs/php/xdebug.ini
 
       - name: Copy Docker env file
         run: cp .env.example .env
@@ -30,7 +30,7 @@ jobs:
         run: docker-compose up -d
 
       - name: Tests
-        run: docker-compose run -T backend vendor/bin/phpunit
+        run: docker-compose run -w /var/www/src -T backend vendor/bin/phpunit
 #        with:
 #          name: test-reports
 #          path: src/test-reports
