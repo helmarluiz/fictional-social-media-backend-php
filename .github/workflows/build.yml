@@ -87,7 +87,7 @@ jobs:
           path: src/test-reports
 
       - name: SonarCloud Scan
-        run: docker run -ti --volume="$(pwd)/src:/usr/src" --network="host" newtmitch/sonar-scanner sonar-scanner \
+        run: docker run --volume="$(pwd)/src:/usr/src" --network="host" newtmitch/sonar-scanner sonar-scanner \
           -Dsonar.host.url=https://sonarcloud.io \
           -Dsonar.projectKey=fsm \
           -Dsonar.organization=helmar-luiz \
