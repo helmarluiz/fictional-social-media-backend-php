@@ -22,9 +22,9 @@ jobs:
 
       - name: Tests
         run: docker exec -it fsm-backend vendor/bin/phpunit
-        with:
-          name: test-reports
-          path: src/test-reports
+#        with:
+#          name: test-reports
+#          path: src/test-reports
 
 #      - name: Install composer and dependencies
 #        uses: php-actions/composer@v6
