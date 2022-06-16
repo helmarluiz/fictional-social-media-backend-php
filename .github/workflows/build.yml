@@ -27,7 +27,7 @@ jobs:
         run: docker-compose up -d
 
       - name: Tests
-        run: docker-compose run -w /var/www/src -T backend bash -c "composer update && vendor/bin/phpunit"
+        run: docker-compose run -w /var/www/src -T backend bash -c "ls -la && composer update && vendor/bin/phpunit"
 #        with:
 #          name: test-reports
 #          path: src/test-reports
