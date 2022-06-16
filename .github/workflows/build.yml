@@ -59,7 +59,7 @@ jobs:
 #        run: |
 #          sed -i 's/\/home\/runner\/work\/<your-repo-name>\/<your-repo-name>\//\/github\/workspace\//g' phpunit.coverage.xml
 #          sed -i 's/\/home\/runner\/work\/<your-repo-name>\/<your-repo-name>\//\/github\/workspace\//g' phpunit.junit.xml
-
+#     run: sed -i 's/;xdebug.mode=debug/xdebug.mode=coverage/g' docker/configs/php/xdebug.ini
       - name: Create Artifacts
         uses: actions/upload-artifact@master
         with:
@@ -92,12 +92,12 @@ jobs:
           -Dsonar.host.url=https://sonarcloud.io
           -Dsonar.projectKey=fsm
           -Dsonar.organization=helmar-luiz
+          -Dsonar.php.coverage.reportPaths=test-reports/phpunit.coverage.xml
+          -Dsonar.php.tests.reportPath=test-reports/phpunit.junit.xml
           -Dsonar.language=php
           -Dsonar.sources=.
           -Dsonar.login=580ceecf977616f6c8b2064bfa4e4926d3e7065d
           -Dsonar.verbose=true
           -Dsonar.scm.disabled=true
-          -Dsonar.exclusions='vendor/**, build/**, node_modules/**'
+          -Dsonar.exclusions='vendor/**'
           -Dsonar.inclusions='**/*.php'
-          -Dsonar.php.coverage.reportPaths=test-reports/phpunit.coverage.xml
-          -Dsonar.php.tests.reportPath=test-reports/phpunit.junit.xml
