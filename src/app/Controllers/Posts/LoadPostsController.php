@@ -36,7 +36,7 @@ class LoadPostsController
             Response::json($this->cacheService->loadData($page, $perPage));
         } catch (Exception $e) {
             Log::error('LoadPostsController ERROR: ' . $e->getMessage());
-            Response::json(['message' => 'Internal Error, please try again later'], 500);
+            Response::json(['message' => 'Internal Error, please try again later.'], 500);
         }
     }
 }
