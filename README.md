@@ -2,6 +2,8 @@
 
 Project implemented for studies proposes, using PHP 8.1 without framework and the following technologies:
 
+Sonar Status [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=helmarluiz_fictional-social-media-backend-php&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=helmarluiz_fictional-social-media-backend-php)
+
 ### Libs and tools used
     - PHP 8.1 - The latest PHP stable version.
     - PHPUnit 9.5 - Testing tool, used for Unit and Feature testing in this project.
