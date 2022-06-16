@@ -10,41 +10,46 @@ jobs:
     name: Tests PHPUnit
     runs-on: ubuntu-latest
     environment: master
+    services:
+      db-mysql:
+        image: mysql
+        env:
+          MYSQL_ROOT_PASSWORD: 12345
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
 
-      - name: change code xdebug mode to coverage
-        run: sed -i 's/;xdebug.mode=debug/xdebug.mode=coverage/g' docker/configs/php/xdebug.ini
+#      - name: change code xdebug mode to coverage
+#        run: sed -i 's/;xdebug.mode=debug/xdebug.mode=coverage/g' docker/configs/php/xdebug.ini
 
-      - name: Copy Docker env file
-        run: cp .env.example .env
-
-      - name: Copy Application env file
-        run: cp src/.env.example src/.env
-
-      - name: Start containers
-        run:  docker-compose build && docker-compose up -d
-
-      - name: Tests
-        run: docker-compose run -w /var/www/src -v ${pwd}:/var/www/src -T backend bash -c "ls -la  && vendor/bin/phpunit"
+#      - name: Copy Docker env file
+#        run: cp .env.example .env
+#
+#      - name: Copy Application env file
+#        run: cp src/.env.example src/.env
+#
+#      - name: Start containers
+#        run:  docker-compose build && docker-compose up -d
+#
+#      - name: Tests
+#        run: docker-compose run -w /var/www/src -v ${pwd}:/var/www/src -T backend bash -c "ls -la  && vendor/bin/phpunit"
 #        with:
 #          name: test-reports
 #          path: src/test-reports
 
-#      - name: Install composer and dependencies
-#        uses: php-actions/composer@v6
-#        with:
-#          args: --working-dir=src
-#
-#      - name: PHPUnit Tests
-#        uses: php-actions/phpunit@v3
-#        env:
-#          XDEBUG_MODE: coverage
-#        with:
-#          bootstrap: src/vendor/autoload.php
-#          php_extensions: xdebug
-#          configuration: src/phpunit.xml
+      - name: Install composer and dependencies
+        uses: php-actions/composer@v6
+        with:
+          args: --working-dir=src
+
+      - name: PHPUnit Tests
+        uses: php-actions/phpunit@v3
+        env:
+          XDEBUG_MODE: coverage
+        with:
+          bootstrap: src/vendor/autoload.php
+          php_extensions: xdebug
+          configuration: src/phpunit.xml
 #  sonarcloud:
 #    name: SonarCloud
 #    runs-on: ubuntu-latest
