@@ -51,6 +51,9 @@ jobs:
           configuration: src/phpunit.xml
           args: --coverage-clover=src/test-reports/phpunit.coverage.xml --log-junit=src/test-reports/phpunit.junit.xml
 
+      -name: Show reports
+        run: ls -la src/test-reports
+
 #      - name: fix code coverage paths
 #        working-directory: ./src/test-reports
 #        run: |
@@ -67,6 +70,7 @@ jobs:
     name: SonarCloud
     runs-on: ubuntu-latest
     environment: master
+    needs: tests
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
