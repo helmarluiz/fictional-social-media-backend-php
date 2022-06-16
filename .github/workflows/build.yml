@@ -68,7 +68,7 @@ jobs:
           docker run --volume="$(pwd)/src:/usr/src" --network="host" newtmitch/sonar-scanner sonar-scanner
           -Dsonar.host.url=https://sonarcloud.io
           -Dsonar.projectKey=helmarluiz_fictional-social-media-backend-php
-          -Dsonar.organization=helmar-luiz
+          -Dsonar.organization=helmarluiz
           -Dsonar.php.coverage.reportPaths=test-reports/phpunit.coverage.xml
           -Dsonar.php.tests.reportPath=test-reports/phpunit.junit.xml
           -Dsonar.language=php
