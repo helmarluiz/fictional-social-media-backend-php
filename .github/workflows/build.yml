@@ -87,9 +87,9 @@ jobs:
       - name: fix code coverage paths
         working-directory: ./src/test-reports
         run: |
-          echo ${GITHUB_REPOSITORY}
-          sed -i 's/\/home\/runner\/work\/${GITHUB_REPOSITORY#*/}\/${GITHUB_REPOSITORY#*/}\//\/github\/workspace\//g' phpunit.coverage.xml
-          sed -i 's/\/home\/runner\/work\/${GITHUB_REPOSITORY#*/}\/${GITHUB_REPOSITORY#*/}\//\/github\/workspace\//g' phpunit.junit.xml
+          echo ${{ github.event.repository.name }}
+          sed -i 's/\/home\/runner\/work\/${{ github.event.repository.name }}\/${{ github.event.repository.name }}\//\/github\/workspace\//g' phpunit.coverage.xml
+          sed -i 's/\/home\/runner\/work\/${{ github.event.repository.name }}\/${{ github.event.repository.name }}\//\/github\/workspace\//g' phpunit.junit.xml
           ls -la ./
 
       - name: SonarCloud Scan
