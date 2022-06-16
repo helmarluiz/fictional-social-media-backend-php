@@ -14,12 +14,18 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
     steps:
+      - name: Checkout Code
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-      - uses: actions/checkout@v2
-      - uses: php-actions/composer@v6
+
+      - name: Install composer and dependencies
+        uses: php-actions/composer@v6
+
       - name: PHPUnit Tests
-        run: XDEBUG_MODE=coverage ./vendor/bin/phpunit
+        uses: php-actions/phpunit@v3
+        env:
+          XDEBUG_MODE: coverage
+
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
