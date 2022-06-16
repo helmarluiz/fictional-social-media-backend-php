@@ -88,11 +88,11 @@ jobs:
         working-directory: ./src/test-reports
         run: |
           echo ${{ github.event.repository.name }}
-          sed -i 's/\/home\/runner\/work\/${{ github.event.repository.name }}\/${{ github.event.repository.name }}\//\/github\/workspace\//g' phpunit.coverage.xml
-          sed -i 's/\/home\/runner\/work\/${{ github.event.repository.name }}\/${{ github.event.repository.name }}\//\/github\/workspace\//g' phpunit.junit.xml
+          sed -i 's/\/app\/src\//\/github\/workspace\/src\//g' phpunit.coverage.xml
+          sed -i 's/\/app\/src\//\/github\/workspace\/src\//g' phpunit.junit.xml
           ls -la
-          cat phpunit.coverage.xml
-          cat phpunit.junit.xml
+          cat phpunit.coverage.xml | grep .php
+          cat phpunit.junit.xml | grep .php
 
       - name: SonarCloud Scan
         run: >
