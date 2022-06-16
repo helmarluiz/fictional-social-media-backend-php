@@ -50,8 +50,8 @@ jobs:
           php_extensions: xdebug
           configuration: src/phpunit.xml
 
-        - name: PHPUnit Tests
-          run: ls -la src
+      - name: Show files
+        run: ls -la src
 
   sonarcloud:
     name: SonarCloud
