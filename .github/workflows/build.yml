@@ -21,9 +21,11 @@ jobs:
 
       - name: Install composer and dependencies
         uses: php-actions/composer@v6
+        working-directory: ./src
 
       - name: PHPUnit Tests
         uses: php-actions/phpunit@v3
+        working-directory: ./src
         env:
           XDEBUG_MODE: coverage
 
