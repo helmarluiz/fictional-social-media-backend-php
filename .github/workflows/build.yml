@@ -17,6 +17,12 @@ jobs:
       - name: change code xdebug mode to coverage
         run: sed -i 's/=debug/=coverage/g' docker/configs/php/xdebug.ini
 
+      - name: Copy Docker env file
+        run: cp .env.example .env#
+
+      - name: Copy Application env file
+          run: cp src/.env.example src/.env
+
       - name: Start containers
         run: docker-compose up -d
 
