@@ -47,7 +47,7 @@ jobs:
           php_version: 8.1
           version: latest
           bootstrap: src/vendor/autoload.php
-          php_extensions: xdebug pdo pdo_mysql
+          php_extensions: xdebug
           configuration: src/phpunit.xml
 #  sonarcloud:
 #    name: SonarCloud
