@@ -51,7 +51,7 @@ jobs:
           configuration: src/phpunit.xml
           args: --coverage-clover=src/test-reports/phpunit.coverage.xml --log-junit=src/test-reports/phpunit.junit.xml
 
-      -name: Show reports
+      - name: Show reports
         run: ls -la src/test-reports
 
 #      - name: fix code coverage paths
