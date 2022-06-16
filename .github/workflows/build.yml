@@ -6,6 +6,26 @@ on:
 #  pull_request:
 #    types: [opened, synchronize, reopened]
 jobs:
+  tests:
+    name: Tests
+    runs-on: ubuntu-latest
+    environment: master
+    defaults:
+      run:
+        working-directory: src
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+
+      - name: Install composer and dependencies
+        uses: php-actions/composer@v6
+
+      - name: PHPUnit Tests
+        uses: php-actions/phpunit@v3
+        env:
+          XDEBUG_MODE: coverage
   sonarcloud:
     name: SonarCloud
     runs-on: ubuntu-latest
@@ -18,16 +38,6 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-
-      - name: Install composer and dependencies
-        uses: php-actions/composer@v6
-        working-directory: ./src
-
-      - name: PHPUnit Tests
-        uses: php-actions/phpunit@v3
-        working-directory: ./src
-        env:
-          XDEBUG_MODE: coverage
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
