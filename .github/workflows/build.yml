@@ -52,7 +52,7 @@ jobs:
           args: --coverage-clover=src/test-reports/phpunit.coverage.xml --log-junit=src/test-reports/phpunit.junit.xml
 
       - name: Show reports
-        run: ls -la src/test-reports
+        run: ls -la src/test-reports && ls -la src
 
 #      - name: fix code coverage paths
 #        working-directory: ./src/test-reports
@@ -85,6 +85,9 @@ jobs:
         with:
           name: test-reports
           path: src/test-reports
+
+      - name: Show reports
+        run: ls -la src/test-reports && ls -la src  && chmod -R 777 src/test-reports && ls -la src/test-reports
 
       - name: SonarCloud Scan
         run: >
