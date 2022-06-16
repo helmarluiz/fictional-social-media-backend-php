@@ -30,7 +30,7 @@ jobs:
         run: docker-compose up -d
 
       - name: Tests
-        run: docker exec -it fsm-backend vendor/bin/phpunit
+        run: docker exec -T fsm-backend vendor/bin/phpunit
 #        with:
 #          name: test-reports
 #          path: src/test-reports
