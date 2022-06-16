@@ -6,31 +6,13 @@ on:
 #  pull_request:
 #    types: [opened, synchronize, reopened]
 jobs:
-  tests:
+  build-tests:
     name: Tests PHPUnit
     runs-on: ubuntu-latest
     environment: master
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
-
-#      - name: change code xdebug mode to coverage
-#        run: sed -i 's/;xdebug.mode=debug/xdebug.mode=coverage/g' docker/configs/php/xdebug.ini
-
-#      - name: Copy Docker env file
-#        run: cp .env.example .env
-#
-#      - name: Copy Application env file
-#        run: cp src/.env.example src/.env
-#
-#      - name: Start containers
-#        run:  docker-compose build && docker-compose up -d
-#
-#      - name: Tests
-#        run: docker-compose run -w /var/www/src -v ${pwd}:/var/www/src -T backend bash -c "ls -la  && vendor/bin/phpunit"
-#        with:
-#          name: test-reports
-#          path: src/test-reports
 
       - name: Install composer and dependencies
         uses: php-actions/composer@v6
@@ -51,48 +33,35 @@ jobs:
           configuration: src/phpunit.xml
           args: --coverage-clover=src/test-reports/phpunit.coverage.xml --log-junit=src/test-reports/phpunit.junit.xml
 
-      - name: Show reports
-        run: ls -la src/test-reports && ls -la src
-
-#     run: sed -i 's/;xdebug.mode=debug/xdebug.mode=coverage/g' docker/configs/php/xdebug.ini
-      - name: Create Artifacts
+      - name: Create test-reports artifacts
         uses: actions/upload-artifact@master
         with:
           name: test-reports
           path: src/test-reports
 
   sonarcloud:
-    name: SonarCloud
+    name: SonarCloud Scanner
     runs-on: ubuntu-latest
     environment: master
     needs: tests
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
 
-      - name: Create Artifacts
+      - name: Download test-reports artifacts
         uses: actions/download-artifact@master
         with:
           name: test-reports
           path: src/test-reports
 
-      - name: Show reports
-        run: ls -la src/test-reports && ls -la src  && chmod -R 777 src/test-reports && ls -la src/test-reports
-
-      - name: fix code coverage paths
+      - name: Fix PHPUnit code coverage paths
         working-directory: ./src/test-reports
         run: |
           echo ${{ github.event.repository.name }}
           sed -i 's/\/app\/src\//\/usr\/src\//g' phpunit.coverage.xml
           sed -i 's/\/app\/src\//\/usr\/src\//g' phpunit.junit.xml
-          ls -la
-          cat phpunit.coverage.xml | grep .php
-          cat phpunit.junit.xml | grep .php
 
       - name: SonarCloud Scan
         run: >
@@ -104,7 +73,7 @@ jobs:
           -Dsonar.php.tests.reportPath=test-reports/phpunit.junit.xml
           -Dsonar.language=php
           -Dsonar.sources=.
-          -Dsonar.login=580ceecf977616f6c8b2064bfa4e4926d3e7065d
+          -Dsonar.login=${{ secrets.SONAR_TOKEN }}
           -Dsonar.verbose=true
           -Dsonar.scm.disabled=true
           -Dsonar.exclusions='vendor/**'
