@@ -49,9 +49,13 @@ jobs:
           bootstrap: src/vendor/autoload.php
           php_extensions: xdebug
           configuration: src/phpunit.xml
+          args: --coverage-clover=src/test-reports/phpunit.coverage.xml --log-junit=src/test-reports/phpunit.junit.xml
 
-      - name: Show files
-        run: ls -la src
+      - name: fix code coverage paths
+        working-directory: ./src/test-reports
+        run: |
+          sed -i 's/\/home\/runner\/work\/<your-repo-name>\/<your-repo-name>\//\/github\/workspace\//g' phpunit.coverage.xml
+          sed -i 's/\/home\/runner\/work\/<your-repo-name>\/<your-repo-name>\//\/github\/workspace\//g' phpunit.junit.xml
 
   sonarcloud:
     name: SonarCloud
