@@ -87,17 +87,17 @@ jobs:
           path: src/test-reports
 
       - name: SonarCloud Scan
-        run: |
-          docker run --volume="$(pwd)/src:/usr/src" --network="host" newtmitch/sonar-scanner sonar-scanner \
-          -Dsonar.host.url=https://sonarcloud.io \
-          -Dsonar.projectKey=fsm \
-          -Dsonar.organization=helmar-luiz \
-          -Dsonar.language=php \
-          -Dsonar.sources=. \
-          -Dsonar.login=580ceecf977616f6c8b2064bfa4e4926d3e7065d \
-          -Dsonar.verbose=true \
-          -Dsonar.scm.disabled=true \
-          -Dsonar.exclusions='vendor/**, build/**, node_modules/**' \
-          -Dsonar.inclusions='**/*.php' \
-          -Dsonar.php.coverage.reportPaths=test-reports/phpunit.coverage.xml \
+        run: >
+          docker run --volume="$(pwd)/src:/usr/src" --network="host" newtmitch/sonar-scanner sonar-scanner
+          -Dsonar.host.url=https://sonarcloud.io
+          -Dsonar.projectKey=fsm
+          -Dsonar.organization=helmar-luiz
+          -Dsonar.language=php
+          -Dsonar.sources=.
+          -Dsonar.login=580ceecf977616f6c8b2064bfa4e4926d3e7065d
+          -Dsonar.verbose=true
+          -Dsonar.scm.disabled=true
+          -Dsonar.exclusions='vendor/**, build/**, node_modules/**'
+          -Dsonar.inclusions='**/*.php'
+          -Dsonar.php.coverage.reportPaths=test-reports/phpunit.coverage.xml
           -Dsonar.php.tests.reportPath=test-reports/phpunit.junit.xml
