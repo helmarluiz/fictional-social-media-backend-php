@@ -6,7 +6,7 @@ on:
 #  pull_request:
 #    types: [opened, synchronize, reopened]
 jobs:
-  build-tests:
+  build-and-tests:
     name: Tests PHPUnit
     runs-on: ubuntu-latest
     environment: master
@@ -43,7 +43,7 @@ jobs:
     name: SonarCloud Scanner
     runs-on: ubuntu-latest
     environment: master
-    needs: tests
+    needs: build-and-tests
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
