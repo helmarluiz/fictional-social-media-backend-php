@@ -21,6 +21,9 @@ jobs:
 
       - name: Install composer and dependencies
         uses: php-actions/composer@v6
+        with:
+          # relative path to the place where source code with Dockerfile is located
+          context: ./src
 
       - name: PHPUnit Tests
         uses: php-actions/phpunit@v3
