@@ -10,9 +10,6 @@ jobs:
     name: Tests PHPUnit
     runs-on: ubuntu-latest
     environment: master
-    defaults:
-      run:
-        working-directory: src
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
@@ -22,12 +19,16 @@ jobs:
       - name: Install composer and dependencies
         uses: php-actions/composer@v6
         with:
-          args: ---working-dir=src
+          args: --working-dir=src
 
       - name: PHPUnit Tests
         uses: php-actions/phpunit@v3
         env:
           XDEBUG_MODE: coverage
+        with:
+          bootstrap: src/vendor/autoload.php
+          php_extensions: xdebug
+          configuration: src/phpunit.xml
   sonarcloud:
     name: SonarCloud
     runs-on: ubuntu-latest
