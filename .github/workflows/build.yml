@@ -51,11 +51,11 @@ jobs:
           configuration: src/phpunit.xml
           args: --coverage-clover=src/test-reports/phpunit.coverage.xml --log-junit=src/test-reports/phpunit.junit.xml
 
-      - name: fix code coverage paths
-        working-directory: ./src/test-reports
-        run: |
-          sed -i 's/\/home\/runner\/work\/<your-repo-name>\/<your-repo-name>\//\/github\/workspace\//g' phpunit.coverage.xml
-          sed -i 's/\/home\/runner\/work\/<your-repo-name>\/<your-repo-name>\//\/github\/workspace\//g' phpunit.junit.xml
+#      - name: fix code coverage paths
+#        working-directory: ./src/test-reports
+#        run: |
+#          sed -i 's/\/home\/runner\/work\/<your-repo-name>\/<your-repo-name>\//\/github\/workspace\//g' phpunit.coverage.xml
+#          sed -i 's/\/home\/runner\/work\/<your-repo-name>\/<your-repo-name>\//\/github\/workspace\//g' phpunit.junit.xml
 
       - name: Create Artifacts
         uses: actions/upload-artifact@master
