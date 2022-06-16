@@ -49,18 +49,22 @@ jobs:
           bootstrap: src/vendor/autoload.php
           php_extensions: xdebug
           configuration: src/phpunit.xml
-#  sonarcloud:
-#    name: SonarCloud
-#    runs-on: ubuntu-latest
-#    environment: master
-#    env:
-#      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-#      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-#    steps:
-#      - name: Checkout Code
-#        uses: actions/checkout@v2
-#        with:
-#          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-#
-#      - name: SonarCloud Scan
-#        uses: SonarSource/sonarcloud-github-action@master
+
+        - name: PHPUnit Tests
+          run: ls -la src
+
+  sonarcloud:
+    name: SonarCloud
+    runs-on: ubuntu-latest
+    environment: master
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
