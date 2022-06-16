@@ -7,7 +7,7 @@ on:
 #    types: [opened, synchronize, reopened]
 jobs:
   tests:
-    name: Tests
+    name: Tests PHPUnit
     runs-on: ubuntu-latest
     environment: master
     defaults:
