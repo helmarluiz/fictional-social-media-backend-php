@@ -18,10 +18,13 @@ jobs:
         run: sed -i 's/=debug/=coverage/g' docker/configs/php/xdebug.ini
 
       - name: Copy Docker env file
-        run: cp .env.example .env#
+        run: cp .env.example .env
 
       - name: Copy Application env file
         run: cp src/.env.example src/.env
+
+      - name: List files
+        run: ls -la
 
       - name: Start containers
         run: docker-compose up -d
