@@ -18,16 +18,16 @@ class UserAnalysisApiTest extends TestCase
 
     public function testGetPosts()
     {
-//        $response = $this->httpClient->get(
-//            'fsm-nginx/api/user-analysis',
-//            [
-//                'page' => 1,
-//                'limit' => 15,
-//            ]
-//        );
-//
-//        $this->assertEquals(200, $response->getStatusCode(), 'Invalid Http Status Code');
-//        $this->assertArrayHasKey('data', $response->getBodyArray(), 'There is no data attribute.');
-//        $this->assertCount(15, $response->getBodyArray()['data'], 'Response is not paginated');
+        //        $response = $this->httpClient->get(
+        //            'fsm-nginx/api/user-analysis',
+        //            [
+        //                'page' => 1,
+        //                'limit' => 15,
+        //            ]
+        //        );
+        //
+        //        $this->assertEquals(200, $response->getStatusCode(), 'Invalid Http Status Code');
+        //        $this->assertArrayHasKey('data', $response->getBodyArray(), 'There is no data attribute.');
+        //        $this->assertCount(15, $response->getBodyArray()['data'], 'Response is not paginated');
     }
 }

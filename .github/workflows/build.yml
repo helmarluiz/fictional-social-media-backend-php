@@ -40,6 +40,8 @@ jobs:
       - name: Install composer and dependencies
         uses: php-actions/composer@v6
         with:
+          php_version: 8.1
+          version: latest
           args: --working-dir=src
 
       - name: PHPUnit Tests
@@ -47,8 +49,10 @@ jobs:
         env:
           XDEBUG_MODE: coverage
         with:
+          php_version: 8.1
+          version: latest
           bootstrap: src/vendor/autoload.php
-          php_extensions: xdebug
+          php_extensions: xdebug pdo pdo_mysql
           configuration: src/phpunit.xml
 #  sonarcloud:
 #    name: SonarCloud
