@@ -17,5 +17,9 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - uses: actions/checkout@v2
+      - uses: php-actions/composer@v6
+      - name: PHPUnit Tests
+        run: XDEBUG_MODE=coverage ./vendor/bin/phpunit
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
