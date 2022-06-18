@@ -28,7 +28,7 @@ jobs:
       - name: Cache dependencies
         uses: actions/cache@v2
         with:
-          path: src/${{ steps.composer-cache.outputs.dir }}
+          path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: ${{ runner.os }}-composer-
 
