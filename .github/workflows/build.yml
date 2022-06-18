@@ -32,7 +32,8 @@ jobs:
           restore-keys: ${{ runner.os }}-composer-
 
       - name: Install dependencies
-        run: composer install --prefer-dist --working-dir=src
+        working-directory: ./src
+        run: composer install --prefer-dist
 
       - name: Detect coding standard violations
         run: src/vendor/bin/phpcs -q --report=checkstyle | cs2pr --graceful-warnings
