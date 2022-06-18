@@ -21,6 +21,9 @@ jobs:
           version: latest
           args: --working-dir=src
 
+      - name: Detect coding standard violations
+        run: src/vendor/bin/phpcs -q --report=checkstyle | cs2pr --graceful-warnings
+
       - name: PHPUnit Tests
         uses: php-actions/phpunit@v3
         env:
