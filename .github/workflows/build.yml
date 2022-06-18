@@ -38,7 +38,9 @@ jobs:
 
       - name: Detect coding standard violations
         working-directory: ./src
-        run: vendor/bin/phpcs -q --extensions=php  --standard=PSR12 --report=checkstyle app tests | cs2pr --graceful-warnings
+        run: > 
+          vendor/bin/phpcs -q --extensions=php --standard=PSR12 
+          --report=checkstyle app tests | cs2pr --graceful-warnings
 
       - name: PHPUnit Tests
         uses: php-actions/phpunit@v3
