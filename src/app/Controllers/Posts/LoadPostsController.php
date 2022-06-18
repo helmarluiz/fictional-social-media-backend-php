@@ -19,7 +19,7 @@ class LoadPostsController
     public function __construct()
     {
         $this->postModel = new PostModel();
-        $this->cacheService = new PostsCacheService();
+        $this->cacheService = new PostsCacheService()
     }
 
     /**
