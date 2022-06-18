@@ -36,7 +36,8 @@ jobs:
         run: composer install --prefer-dist
 
       - name: Detect coding standard violations
-        run: src/vendor/bin/phpcs -q --report=checkstyle | cs2pr --graceful-warnings
+        working-directory: ./src
+        run: vendor/bin/phpcs -q --extensions=php  --standard=PSR12 --report=checkstyle app tests | cs2pr --graceful-warnings
 
       - name: PHPUnit Tests
         uses: php-actions/phpunit@v3
