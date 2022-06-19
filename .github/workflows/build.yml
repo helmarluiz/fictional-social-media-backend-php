@@ -46,7 +46,6 @@ jobs:
 
       - name: PHPUnit Tests
         uses: php-actions/phpunit@v3
-        allow-failure: true
         env:
           XDEBUG_MODE: coverage
         with:
