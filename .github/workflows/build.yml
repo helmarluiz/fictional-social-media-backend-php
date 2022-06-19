@@ -35,9 +35,9 @@ jobs:
       - name: Install dependencies
         working-directory: ./src
         run: |
-        ls -la /home/runner/work/fictional-social-media-backend-php/fictional-social-media-backend-php
-        pwd
-        composer install --prefer-dist --no-suggest --no-progress
+          ls -la /home/runner/work/fictional-social-media-backend-php/fictional-social-media-backend-php
+          pwd
+          composer install --prefer-dist --no-suggest --no-progress
 
       - name: Detect coding standard violations
         working-directory: ./src
