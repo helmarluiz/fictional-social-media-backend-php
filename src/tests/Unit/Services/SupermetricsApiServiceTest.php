@@ -22,7 +22,7 @@ class SupermetricsApiServiceTest extends TestCase
     {
         $token = $this->supermetricsApiService->getAuthenticationToken(true);
 
-        $this->assertEquals(false, empty($token), 'Authentication token is not valid');
+        $this->assertEquals(true, empty($token), 'Authentication token is not valid');
     }
 
     public function testRequestGetListOfPosts()
