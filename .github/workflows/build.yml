@@ -32,15 +32,6 @@ jobs:
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: ${{ runner.os }}-composer-
 
-#      - name: Install dependencies
-#        working-directory: ./src
-#        run: |
-#          apt-get install git
-#          curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-#
-#      - name: Install dependencies 2
-#        working-directory: ./src
-#        run: composer install
       - name: Install dependencies
         working-directory: ./src
         run: composer install --prefer-dist --no-suggest --no-progress
@@ -51,24 +42,24 @@ jobs:
           ls -la vendor/bin/
           vendor/bin/phpcs -q --extensions=php --standard=PSR12 \
              --report=checkstyle app tests | vendor/bin/cs2pr --graceful-warnings
-#
-#      - name: PHPUnit Tests
-#        uses: php-actions/phpunit@v3
-#        env:
-#          XDEBUG_MODE: coverage
-#        with:
-#          php_version: 8.1
-#          version: latest
-#          bootstrap: src/vendor/autoload.php
-#          php_extensions: xdebug
-#          configuration: src/phpunit.xml
-#          args: --coverage-clover=src/test-reports/phpunit.coverage.xml --log-junit=src/test-reports/phpunit.junit.xml
-#
-#      - name: Create test-reports artifacts
-#        uses: actions/upload-artifact@master
-#        with:
-#          name: test-reports
-#          path: src/test-reports
+
+      - name: PHPUnit Tests
+        uses: php-actions/phpunit@v3
+        env:
+          XDEBUG_MODE: coverage
+        with:
+          php_version: 8.1
+          version: latest
+          bootstrap: src/vendor/autoload.php
+          php_extensions: xdebug
+          configuration: src/phpunit.xml
+          args: --coverage-clover=src/test-reports/phpunit.coverage.xml --log-junit=src/test-reports/phpunit.junit.xml
+
+      - name: Create test-reports artifacts
+        uses: actions/upload-artifact@master
+        with:
+          name: test-reports
+          path: src/test-reports
 
 #  sonarcloud:
 #    name: SonarCloud Scanner
