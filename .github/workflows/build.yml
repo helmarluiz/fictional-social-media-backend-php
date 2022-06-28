@@ -10,8 +10,6 @@ jobs:
     name: Tests PHPUnit
     runs-on: ubuntu-latest
     environment: master
-    container:
-      image: php:8.1-fpm
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
