@@ -10,95 +10,97 @@ jobs:
     name: Tests PHPUnit
     runs-on: ubuntu-latest
     environment: master
+    container:
+      image: php:8.1-cli
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
 
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.1'
-          tools: composer, cs2pr
+#      - name: Setup PHP
+#        uses: shivammathur/setup-php@v2
+#        with:
+#          php-version: '8.1'
+#          tools: composer, cs2pr
 
-      - name: Get composer cache directory
-        id: composer-cache
-        working-directory: ./src
-        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
-
-      - name: Cache dependencies
-        uses: actions/cache@v2
-        with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-composer-
+#      - name: Get composer cache directory
+#        id: composer-cache
+#        working-directory: ./src
+#        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+#
+#      - name: Cache dependencies
+#        uses: actions/cache@v2
+#        with:
+#          path: ${{ steps.composer-cache.outputs.dir }}
+#          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+#          restore-keys: ${{ runner.os }}-composer-
 
       - name: Install dependencies
         working-directory: ./src
-        run: |
-          ls -la /home/runner/work/fictional-social-media-backend-php/fictional-social-media-backend-php
-          pwd
-          composer install --prefer-dist --no-suggest --no-progress
+        run: >
+          curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+          composer install
 
       - name: Detect coding standard violations
         working-directory: ./src
-        run: > 
-          vendor/bin/phpcs -q --extensions=php --standard=PSR12 app tests | cs2pr --graceful-warnings
-
-      - name: PHPUnit Tests
-        uses: php-actions/phpunit@v3
-        env:
-          XDEBUG_MODE: coverage
-        with:
-          php_version: 8.1
-          version: latest
-          bootstrap: src/vendor/autoload.php
-          php_extensions: xdebug
-          configuration: src/phpunit.xml
-          args: --coverage-clover=src/test-reports/phpunit.coverage.xml --log-junit=src/test-reports/phpunit.junit.xml
-
-      - name: Create test-reports artifacts
-        uses: actions/upload-artifact@master
-        with:
-          name: test-reports
-          path: src/test-reports
-
-  sonarcloud:
-    name: SonarCloud Scanner
-    runs-on: ubuntu-latest
-    environment: master
-    needs: build-and-tests
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-
-      - name: Download test-reports artifacts
-        uses: actions/download-artifact@master
-        with:
-          name: test-reports
-          path: src/test-reports
-
-      - name: Fix PHPUnit code coverage paths
-        working-directory: ./src/test-reports
-        run: |
-          echo ${{ github.event.repository.name }}
-          sed -i 's/\/app\/src\//\/usr\/src\//g' phpunit.coverage.xml
-          sed -i 's/\/app\/src\//\/usr\/src\//g' phpunit.junit.xml
-
-      - name: SonarCloud Scan
         run: >
-          docker run --volume="$(pwd)/src:/usr/src" --network="host" newtmitch/sonar-scanner sonar-scanner
-          -Dsonar.host.url=https://sonarcloud.io
-          -Dsonar.projectKey=helmarluiz_fictional-social-media-backend-php
-          -Dsonar.projectName=FSM
-          -Dsonar.organization=helmarluiz
-          -Dsonar.php.coverage.reportPaths=test-reports/phpunit.coverage.xml
-          -Dsonar.php.tests.reportPath=test-reports/phpunit.junit.xml
-          -Dsonar.language=php
-          -Dsonar.sources=.
-          -Dsonar.login=${{ secrets.SONAR_TOKEN }}
-          -Dsonar.verbose=true
-          -Dsonar.scm.disabled=true
-          -Dsonar.exclusions='vendor/**'
-          -Dsonar.inclusions='**/*.php'
+          vendor/bin/phpcs -q --extensions=php --standard=PSR12 \
+             --report=checkstyle app tests | vendor/bin/cs2pr --graceful-warnings
+#
+#      - name: PHPUnit Tests
+#        uses: php-actions/phpunit@v3
+#        env:
+#          XDEBUG_MODE: coverage
+#        with:
+#          php_version: 8.1
+#          version: latest
+#          bootstrap: src/vendor/autoload.php
+#          php_extensions: xdebug
+#          configuration: src/phpunit.xml
+#          args: --coverage-clover=src/test-reports/phpunit.coverage.xml --log-junit=src/test-reports/phpunit.junit.xml
+#
+#      - name: Create test-reports artifacts
+#        uses: actions/upload-artifact@master
+#        with:
+#          name: test-reports
+#          path: src/test-reports
+
+#  sonarcloud:
+#    name: SonarCloud Scanner
+#    runs-on: ubuntu-latest
+#    environment: master
+#    needs: build-and-tests
+#    steps:
+#      - name: Checkout Code
+#        uses: actions/checkout@v2
+#        with:
+#          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+#
+#      - name: Download test-reports artifacts
+#        uses: actions/download-artifact@master
+#        with:
+#          name: test-reports
+#          path: src/test-reports
+#
+#      - name: Fix PHPUnit code coverage paths
+#        working-directory: ./src/test-reports
+#        run: |
+#          echo ${{ github.event.repository.name }}
+#          sed -i 's/\/app\/src\//\/usr\/src\//g' phpunit.coverage.xml
+#          sed -i 's/\/app\/src\//\/usr\/src\//g' phpunit.junit.xml
+#
+#      - name: SonarCloud Scan
+#        run: >
+#          docker run --volume="$(pwd)/src:/usr/src" --network="host" newtmitch/sonar-scanner sonar-scanner
+#          -Dsonar.host.url=https://sonarcloud.io
+#          -Dsonar.projectKey=helmarluiz_fictional-social-media-backend-php
+#          -Dsonar.projectName=FSM
+#          -Dsonar.organization=helmarluiz
+#          -Dsonar.php.coverage.reportPaths=test-reports/phpunit.coverage.xml
+#          -Dsonar.php.tests.reportPath=test-reports/phpunit.junit.xml
+#          -Dsonar.language=php
+#          -Dsonar.sources=.
+#          -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+#          -Dsonar.verbose=true
+#          -Dsonar.scm.disabled=true
+#          -Dsonar.exclusions='vendor/**'
+#          -Dsonar.inclusions='**/*.php'
