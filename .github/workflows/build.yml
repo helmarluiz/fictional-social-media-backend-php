@@ -41,10 +41,14 @@ jobs:
 #      - name: Install dependencies 2
 #        working-directory: ./src
 #        run: composer install
-#
+      - name: Install dependencies
+        working-directory: ./src
+        run: composer install --prefer-dist --no-suggest --no-progress
+
       - name: Detect coding standard violations
         working-directory: ./src
         run: |
+          ls -la vendor/bin/
           vendor/bin/phpcs -q --extensions=php --standard=PSR12 \
              --report=checkstyle app tests | vendor/bin/cs2pr --graceful-warnings
 #
