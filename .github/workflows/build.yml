@@ -43,6 +43,9 @@ jobs:
           vendor/bin/phpcs -q --extensions=php --standard=PSR12 \
              --report=checkstyle app tests | vendor/bin/cs2pr --graceful-warnings
 
+      - name: Configure matchers # Add annotations to your PHPUnit tests
+        uses: mheap/phpunit-matcher-action@v1
+
       - name: PHPUnit Tests
         uses: php-actions/phpunit@v3
         env:
