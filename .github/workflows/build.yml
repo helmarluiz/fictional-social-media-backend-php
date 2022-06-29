@@ -76,49 +76,49 @@ jobs:
 #          configuration: src/phpunit.xml
 #          args: --coverage-clover=src/test-reports/phpunit.coverage.xml --log-junit=src/test-reports/phpunit.junit.xml
 #
-#      - name: Create test-reports artifacts
-#        uses: actions/upload-artifact@master
-#        with:
-#          name: test-reports
-#          path: src/test-reports
+      - name: Create test-reports artifacts
+        uses: actions/upload-artifact@master
+        with:
+          name: test-reports
+          path: src/tests/reports
 
-#  sonarcloud:
-#    name: SonarCloud Scanner
-#    runs-on: ubuntu-latest
-#    environment: master
-#    needs: build-and-tests
-#    steps:
-#      - name: Checkout Code
-#        uses: actions/checkout@v2
-#        with:
-#          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-#
-#      - name: Download test-reports artifacts
-#        uses: actions/download-artifact@master
-#        with:
-#          name: test-reports
-#          path: src/test-reports
-#
-#      - name: Fix PHPUnit code coverage paths
-#        working-directory: ./src/test-reports
-#        run: |
-#          echo ${{ github.event.repository.name }}
-#          sed -i 's/\/app\/src\//\/usr\/src\//g' phpunit.coverage.xml
-#          sed -i 's/\/app\/src\//\/usr\/src\//g' phpunit.junit.xml
-#
-#      - name: SonarCloud Scan
-#        run: >
-#          docker run --volume="$(pwd)/src:/usr/src" --network="host" newtmitch/sonar-scanner sonar-scanner
-#          -Dsonar.host.url=https://sonarcloud.io
-#          -Dsonar.projectKey=helmarluiz_fictional-social-media-backend-php
-#          -Dsonar.projectName=FSM
-#          -Dsonar.organization=helmarluiz
-#          -Dsonar.php.coverage.reportPaths=test-reports/phpunit.coverage.xml
-#          -Dsonar.php.tests.reportPath=test-reports/phpunit.junit.xml
-#          -Dsonar.language=php
-#          -Dsonar.sources=.
-#          -Dsonar.login=${{ secrets.SONAR_TOKEN }}
-#          -Dsonar.verbose=true
-#          -Dsonar.scm.disabled=true
-#          -Dsonar.exclusions='vendor/**'
-#          -Dsonar.inclusions='**/*.php'
+  sonarcloud:
+    name: SonarCloud Scanner
+    runs-on: ubuntu-latest
+    environment: master
+    needs: build-and-tests
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+
+      - name: Download test-reports artifacts
+        uses: actions/download-artifact@master
+        with:
+          name: test-reports
+          path: src/tests/reports
+
+      - name: Fix PHPUnit code coverage paths
+        working-directory: ./src/tests/reports
+        run: |
+          echo ${{ github.event.repository.name }}
+          sed -i 's/\/app\/src\//\/usr\/src\//g' phpunit.coverage.xml
+          sed -i 's/\/app\/src\//\/usr\/src\//g' phpunit.junit.xml
+
+      - name: SonarCloud Scan
+        run: >
+          docker run --volume="$(pwd)/src:/usr/src" --network="host" newtmitch/sonar-scanner sonar-scanner
+          -Dsonar.host.url=https://sonarcloud.io
+          -Dsonar.projectKey=helmarluiz_fictional-social-media-backend-php
+          -Dsonar.projectName=FSM
+          -Dsonar.organization=helmarluiz
+          -Dsonar.php.coverage.reportPaths=tests/reports/phpunit.coverage.xml
+          -Dsonar.php.tests.reportPath=tests/reports/phpunit.junit.xml
+          -Dsonar.language=php
+          -Dsonar.sources=.
+          -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+          -Dsonar.verbose=true
+          -Dsonar.scm.disabled=true
+          -Dsonar.exclusions='vendor/**'
+          -Dsonar.inclusions='**/*.php'
