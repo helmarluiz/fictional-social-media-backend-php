@@ -16,7 +16,9 @@ jobs:
 
 
       - name: Build containers
-        run: docker-compose build
+        run: |
+          cp .env.example .env
+          docker-compose build
 
       - name: Start all containers
         run: docker-compose up -d
