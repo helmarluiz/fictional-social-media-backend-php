@@ -3,8 +3,8 @@ on:
   push:
     branches:
       - main
-#  pull_request:
-#    types: [opened, synchronize, reopened]
+  pull_request:
+    types: [opened, synchronize, reopened]
 jobs:
   build-and-tests:
     name: Tests PHPUnit
@@ -13,6 +13,13 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
+
+
+      - name: Build containers
+        run: docker-compose build
+
+      - name: Start all containers
+        run: docker-compose up -d
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -25,45 +32,43 @@ jobs:
         working-directory: ./src
         run: echo "::set-output name=dir::$(composer config cache-files-dir)"
 
-      - name: Cache dependencies
-        uses: actions/cache@v2
-        with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-composer-
-
-      - name: Install dependencies
-        working-directory: ./src
-        run: composer install --prefer-dist --no-suggest --no-progress
-
-      - name: Detect coding standard violations
-        working-directory: ./src
-        run: |
-          ls -la vendor/bin/
-          vendor/bin/phpcs -q --extensions=php --standard=PSR12 \
-             --report=checkstyle app tests | vendor/bin/cs2pr --graceful-warnings
-
-
-      - name: Configure matchers # Add annotations to your PHPUnit tests
-        uses: mheap/phpunit-matcher-action@v1
-
-      - name: PHPUnit Tests
-        uses: php-actions/phpunit@v3
-        env:
-          XDEBUG_MODE: coverage
-        with:
-          php_version: 8.1
-          version: latest
-          bootstrap: src/vendor/autoload.php
-          php_extensions: xdebug
-          configuration: src/phpunit.xml
-          args: --coverage-clover=src/test-reports/phpunit.coverage.xml --log-junit=src/test-reports/phpunit.junit.xml
-
-      - name: Create test-reports artifacts
-        uses: actions/upload-artifact@master
-        with:
-          name: test-reports
-          path: src/test-reports
+#      - name: Cache dependencies
+#        uses: actions/cache@v2
+#        with:
+#          path: ${{ steps.composer-cache.outputs.dir }}
+#          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+#          restore-keys: ${{ runner.os }}-composer-
+#
+#      - name: Install dependencies
+#        working-directory: ./src
+#        run: composer install --prefer-dist --no-suggest --no-progress
+#
+#      - name: Detect coding standard violations
+#        working-directory: ./src
+#        run: |
+#          vendor/bin/phpcs -q --extensions=php --standard=PSR12 \
+#             --report=checkstyle app tests | vendor/bin/cs2pr --graceful-warnings
+#
+#      - name: Configure matchers # Add annotations to your PHPUnit tests
+#        uses: mheap/phpunit-matcher-action@v1
+#
+#      - name: PHPUnit Tests
+#        uses: php-actions/phpunit@v3
+#        env:
+#          XDEBUG_MODE: coverage
+#        with:
+#          php_version: 8.1
+#          version: latest
+#          bootstrap: src/vendor/autoload.php
+#          php_extensions: xdebug
+#          configuration: src/phpunit.xml
+#          args: --coverage-clover=src/test-reports/phpunit.coverage.xml --log-junit=src/test-reports/phpunit.junit.xml
+#
+#      - name: Create test-reports artifacts
+#        uses: actions/upload-artifact@master
+#        with:
+#          name: test-reports
+#          path: src/test-reports
 
 #  sonarcloud:
 #    name: SonarCloud Scanner
