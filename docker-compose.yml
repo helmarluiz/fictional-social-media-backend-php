@@ -1,43 +1,43 @@
 version: "3.7"
 services:
 
-  db-mysql:
-    platform: linux/amd64
-    image: mysql
-    container_name: ${COMPOSE_PROJECT_NAME}-db-mysql
-    command: --default-authentication-plugin=mysql_native_password
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-    volumes:
-      - ./docker/configs/mysql/init/schema.sql:/docker-entrypoint-initdb.d/1.sql
-      - ./docker/configs/mysql/my.cnf:/etc/mysql/my.cnf
-    networks:
-      - fsm-backend
-
-#  backend:
-#    depends_on:
-#      - db-mysql
+#  db-mysql:
+#    platform: linux/amd64
+#    image: mysql
+#    container_name: ${COMPOSE_PROJECT_NAME}-db-mysql
+#    command: --default-authentication-plugin=mysql_native_password
+#    restart: always
 #    environment:
-#      - PHP_IDE_CONFIG=serverName=dofroscra
-#    build:
-#      args:
-#        user: www
-#        uid: 1001
-#      context: ./
-#      dockerfile: docker/dockerfiles/php.dockerfile
-#    container_name: ${COMPOSE_PROJECT_NAME}-backend
-#    extra_hosts:
-#      - "host.docker.internal:host-gateway"
-#    ports:
-#      - 9003:9000
-#    restart: unless-stopped
+#      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
 #    volumes:
-#      - .git:/var/www/src/.git
-#      - ./src:/var/www/src
-#      - /var/www/src/vendor
+#      - ./docker/configs/mysql/init/schema.sql:/docker-entrypoint-initdb.d/1.sql
+#      - ./docker/configs/mysql/my.cnf:/etc/mysql/my.cnf
 #    networks:
 #      - fsm-backend
+
+  backend:
+#    depends_on:
+#      - db-mysql
+    environment:
+      - PHP_IDE_CONFIG=serverName=dofroscra
+    build:
+      args:
+        user: www
+        uid: 1001
+      context: ./
+      dockerfile: docker/dockerfiles/php.dockerfile
+    container_name: ${COMPOSE_PROJECT_NAME}-backend
+#    extra_hosts:
+#      - "host.docker.internal:host-gateway"
+    ports:
+      - 9003:9000
+    restart: unless-stopped
+    volumes:
+      - .git:/var/www/src/.git
+      - ./src:/var/www/src
+      - /var/www/src/vendor
+    networks:
+      - fsm-backend
 
   nginx:
     platform: linux/amd64
