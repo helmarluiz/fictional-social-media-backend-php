@@ -48,6 +48,8 @@ COPY .git .git
 # Set permissions to .git folder
 RUN chown -R $user:$user .git
 
+RUN chown -R $user:$user /var/www/src/tests/reports
+
 # Copy install captainhook shell scrit and set permission
 COPY docker/configs/php/install-captainhook.sh /$user/install-captainhook.sh
 RUN chmod +x /$user/install-captainhook.sh;
