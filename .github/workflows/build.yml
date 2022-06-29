@@ -27,10 +27,8 @@ jobs:
       - uses: satackey/action-docker-layer-caching@v0.0.11
         continue-on-error: true
 
-      - run: docker-compose up -d --build
-#
-#      - name: Start all containers
-#        run: docker-compose up -d
+      - name: Start all containers
+        run: docker-compose up -d --build
 
       - name: Detect coding standard violations
         run: |
