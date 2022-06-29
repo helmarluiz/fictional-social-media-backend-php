@@ -25,7 +25,7 @@ jobs:
 
       - name: Detect coding standard violations
         run: |
-          docker exec fsm-backend bash -c "vendor/bin/phpcs \ 
+          docker exec fsm-backend bash -c "vendor/bin/phpcs \
           -q --extensions=php --standard=PSR12 --report=checkstyle app tests | vendor/bin/cs2pr --graceful-warnings"
 
       - name: Detect coding standard violations
