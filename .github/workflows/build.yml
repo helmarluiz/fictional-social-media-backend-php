@@ -30,8 +30,11 @@ jobs:
 
       - name: Detect coding standard violations
         run: |
-          ls -la $(pwd)/src
-          sudo chown -R $(id -u):$(id -g) ./src/tests/reports
+          ls -la $(pwd)/src/tests
+          echo > src/tests/reports/phpunit.junit.xml
+          echo > src/tests/reports/phpunit.coverage.xml
+          sudo chown -R $USER:$USER ./src/tests/reports
+          echo "::set-output name=containerUser::`id -u`:`id -g`"
           docker exec fsm-backend bash -c "XDEBUG_MODE=coverage vendor/bin/phpunit \
           --coverage-clover=tests/reports/phpunit.coverage.xml --log-junit=tests/reports/phpunit.junit.xml"
 
