@@ -23,13 +23,10 @@ jobs:
       - name: Start all containers
         run: docker-compose up -d
 
-      - name: Install Dependencies
-        run: docker exec fsm-backend bash -c "composer install --prefer-dist --no-suggest --no-progress"
-
       - name: Detect coding standard violations
         run: |
           docker exec fsm-backend bash -c "vendor/bin/phpcs \ 
-           -q --extensions=php --standard=PSR12 --report=checkstyle app tests | vendor/bin/cs2pr --graceful-warnings"
+          -q --extensions=php --standard=PSR12 --report=checkstyle app tests | vendor/bin/cs2pr --graceful-warnings"
 
       - name: Detect coding standard violations
         run: |
