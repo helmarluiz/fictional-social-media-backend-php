@@ -16,7 +16,7 @@ jobs:
 
       # —— Setup Docker Environment 🐋 —————————————————————————————————————————————
       - name: Build containers
-      run: docker-compose build
+        run: docker-compose build
 
       - name: Start all containers
         run: docker-compose up -d
