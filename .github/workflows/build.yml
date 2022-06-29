@@ -24,7 +24,7 @@ jobs:
         run: docker-compose up -d
 
       - name: Install Dependencies
-        run: docker exec fsm-backend composer install
+        run: docker exec fsm-backend bash -c "composer install --prefer-dist --no-suggest --no-progress"
 
       - name: Detect coding standard violations
         run: |
