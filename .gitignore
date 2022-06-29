@@ -10,3 +10,6 @@ docker/configs/sonarqube/extensions
 docker/configs/sonarqube/logs
 docker/configs/sonarqube/temp
 docker/configs/sonarqube/log
+
+# PHPUnit files
+.phpunit.result.cache

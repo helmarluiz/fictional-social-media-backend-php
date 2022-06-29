@@ -83,8 +83,8 @@ jobs:
           -Dsonar.php.tests.reportPath=tests/reports/phpunit.junit.xml
           -Dsonar.language=php
           -Dsonar.sources=.
+          -Dsonar.tests=./tests
           -Dsonar.login=${{ secrets.SONAR_TOKEN }}
-          -Dsonar.verbose=true
           -Dsonar.scm.disabled=true
           -Dsonar.exclusions='vendor/**'
           -Dsonar.inclusions='**/*.php'
