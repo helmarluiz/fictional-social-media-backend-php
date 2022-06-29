@@ -30,6 +30,7 @@ jobs:
 
       - name: Detect coding standard violations
         run: |
+          ls -la $(pwd)
           docker exec fsm-backend bash -v $(pwd)/src:/:rw -c "XDEBUG_MODE=coverage vendor/bin/phpunit \
           --coverage-clover=tests/reports/phpunit.coverage.xml --log-junit=tests/reports/phpunit.junit.xml"
 
