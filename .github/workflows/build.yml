@@ -26,8 +26,8 @@ jobs:
       - uses: satackey/action-docker-layer-caching@v0.0.11
         continue-on-error: true
         with:
-          key: foo-docker-cache-${{ hashFiles('docker-compose*.yml') }}
-          restore-keys: foo-docker-cache-${{ hashFiles('docker-compose*.yml') }}
+          key: ${{ runner.os }}-foo-docker-cache-${{ hashFiles('docker-compose.yml') }}
+          restore-keys: ${{ runner.os }}-foo-docker-cache-${{ hashFiles('docker-compose.yml') }}
 
       - name: Start all containers
         run: docker-compose up -d
