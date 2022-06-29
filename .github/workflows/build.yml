@@ -28,7 +28,9 @@ jobs:
         continue-on-error: true
 
       - name: Start all containers
-        run: docker-compose up -d --build
+        run: |
+          docker images
+          docker-compose up -d
 
       - name: Detect coding standard violations
         run: |
