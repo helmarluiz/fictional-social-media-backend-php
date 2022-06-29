@@ -2,6 +2,7 @@ version: "3.7"
 services:
 
   db-mysql:
+    platform: linux/amd64
     image: mysql
     container_name: ${COMPOSE_PROJECT_NAME}-db-mysql
     command: --default-authentication-plugin=mysql_native_password
@@ -34,11 +35,12 @@ services:
     volumes:
       - .git:/var/www/src/.git
       - ./src:/var/www/src
-      - ./src/vendor:/var/www/src/vendor
+      - /var/www/src/vendor
     networks:
       - fsm-backend
 
   nginx:
+    platform: linux/amd64
     depends_on:
       - backend
     image: nginx:stable
