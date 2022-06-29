@@ -86,5 +86,5 @@ jobs:
           -Dsonar.tests=./tests
           -Dsonar.login=${{ secrets.SONAR_TOKEN }}
           -Dsonar.scm.disabled=true
-          -Dsonar.exclusions='vendor/**'
+          -Dsonar.exclusions='vendor/**','tests/*'
           -Dsonar.inclusions='**/*.php'
