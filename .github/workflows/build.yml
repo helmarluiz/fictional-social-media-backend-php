@@ -7,46 +7,42 @@ on:
     types: [opened, synchronize, reopened]
 jobs:
   build-and-tests:
-    name: Tests PHPUnit
+    name: Build and Tests
     runs-on: ubuntu-latest
     environment: master
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
 
-
-      - name: Copy Env Files
+      - name: Copy environment Files
         run: |
           cp .env.example .env
           cp src/.env.example src/.env
-          docker-compose pull
 
-        # In this step, this action saves a list of existing images,
-        # the cache is created without them in the post run.
-        # It also restores the cache if it exists.
+      - name: Pull docker images
+        run: docker-compose pull
+
+      # Load or store Docker image in cache
       - uses: satackey/action-docker-layer-caching@v0.0.11
         continue-on-error: true
         with:
           key: foo-docker-cache-${{ hashFiles('docker-compose*.yml') }}
           restore-keys: foo-docker-cache-${{ hashFiles('docker-compose*.yml') }}
 
-
       - name: Start all containers
-        run: |
-          docker images
-          docker-compose up -d
+        run: docker-compose up -d
 
-      - name: Detect coding standard violations
+      - name: Detect PHP coding standard violations
         run: |
           docker exec fsm-backend bash -c "vendor/bin/phpcs \
           -q --extensions=php --standard=PSR12 --report=checkstyle app tests | vendor/bin/cs2pr --graceful-warnings"
 
-      - name: Detect coding standard violations
+      - name: PHPUnit tests
         run: |
           docker exec fsm-backend bash -c "XDEBUG_MODE=coverage vendor/bin/phpunit \
           --coverage-clover=tests/reports/phpunit.coverage.xml --log-junit=tests/reports/phpunit.junit.xml"
 
-      - name: Create test-reports artifacts
+      - name: Create PHPUnit report artifacts
         uses: actions/upload-artifact@master
         with:
           name: test-reports
@@ -63,7 +59,7 @@ jobs:
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
 
-      - name: Download test-reports artifacts
+      - name: Download PHPUnit report artifacts
         uses: actions/download-artifact@master
         with:
           name: test-reports
