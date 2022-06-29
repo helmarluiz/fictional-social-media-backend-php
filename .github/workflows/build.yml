@@ -18,13 +18,8 @@ jobs:
       - name: Copy Env Files
         run: |
           cp .env.example .env
-          cp src/.env.example src/.env 
-
-      - uses: actions/checkout@v2
-
-        # Pull the latest image to build, and avoid caching pull-only images.
-        # (docker pull is faster than caching in most cases.)
-      - run: docker-compose pull
+          cp src/.env.example src/.env
+          docker-compose pull
 
         # In this step, this action saves a list of existing images,
         # the cache is created without them in the post run.
@@ -32,10 +27,10 @@ jobs:
       - uses: satackey/action-docker-layer-caching@v0.0.11
           # Ignore the failure of a step and avoid terminating the job.
           continue-on-error: true
-      - run: docker-compose up --build
-
-      - name: Start all containers
-        run: docker-compose up -d
+      - run: docker-compose up -d --build
+#
+#      - name: Start all containers
+#        run: docker-compose up -d
 
       - name: Detect coding standard violations
         run: |
