@@ -69,11 +69,12 @@ jobs:
         working-directory: ./src/tests/reports
         run: |
           echo ${{ github.event.repository.name }}
-          sed -i 's/\/app\/src\//\/usr\/src\//g' phpunit.coverage.xml
-          sed -i 's/\/app\/src\//\/usr\/src\//g' phpunit.junit.xml
+          sed -i 's/\/var\/www\/src\//\/usr\/src\//g' phpunit.coverage.xml
+          sed -i 's/\/var\/www\/src\//\/usr\/src\//g' phpunit.junit.xml
 
       - name: SonarCloud Scan
-        run: >
+        run: |
+          ls -la src/tests/reports
           docker run --volume="$(pwd)/src:/usr/src" --network="host" newtmitch/sonar-scanner sonar-scanner
           -Dsonar.host.url=https://sonarcloud.io
           -Dsonar.projectKey=helmarluiz_fictional-social-media-backend-php
