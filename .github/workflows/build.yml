@@ -31,7 +31,7 @@ jobs:
       - name: Detect coding standard violations
         run: |
           docker exec fsm-backend bash -c "XDEBUG_MODE=coverage vendor/bin/phpunit \
-          --coverage-clover=src/test-reports/phpunit.coverage.xml --log-junit=src/test-reports/phpunit.junit.xml"
+          --coverage-clover=tests/reports/phpunit.coverage.xml --log-junit=tests/reports/phpunit.junit.xml"
 
 #      - name: Setup PHP
 #        uses: shivammathur/setup-php@v2

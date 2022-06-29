@@ -40,7 +40,7 @@ COPY src .
 RUN composer install
 
 # Set permissions to vendor folder
-RUN chown $user:$user /var/www/src/vendor
+RUN chown -R $user:$user /var/www/src/vendor
 
 # Copy git file to be used by Captain Hook
 COPY .git .git
