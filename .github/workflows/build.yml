@@ -23,10 +23,19 @@ jobs:
       - name: Start all containers
         run: docker-compose up -d
 
+      - name: Install Dependencies
+        run: composer install
+
       - name: Detect coding standard violations
         run: |
           docker exec fsm-backend bash -c "vendor/bin/phpcs \ 
            -q --extensions=php --standard=PSR12 --report=checkstyle app tests | vendor/bin/cs2pr --graceful-warnings"
+
+      - name: Detect coding standard violations
+        run: |
+          docker exec fsm-backend bash -c "XDEBUG_MODE=coverage vendor/bin/phpunit \
+          --coverage-clover=src/test-reports/phpunit.coverage.xml --log-junit=src/test-reports/phpunit.junit.xml"
+
 #      - name: Setup PHP
 #        uses: shivammathur/setup-php@v2
 #        with:
