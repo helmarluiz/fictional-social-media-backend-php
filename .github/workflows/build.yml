@@ -79,7 +79,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
-          projectBaseDir: $(pwd)/src
+          projectBaseDir: "$(pwd)/src"
           args: >
             -Dsonar.projectKey=helmarluiz_fictional-social-media-backend-php
             -Dsonar.organization=helmarluiz
