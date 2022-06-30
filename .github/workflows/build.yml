@@ -79,17 +79,16 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
-          projectBaseDir: ./src
           args: >
             -Dsonar.projectKey=helmarluiz_fictional-social-media-backend-php
             -Dsonar.organization=helmarluiz
             -Dsonar.projectName=FSM
             -Dsonar.language=php
-            -Dsonar.sources=./app
-            -Dsonar.tests=./tests
+            -Dsonar.sources=./src/app
+            -Dsonar.tests=./src/tests
             -Dsonar.verbose=true
             -Dsonar.scm.disabled=true
             -Dsonar.exclusions='vendor/**'
             -Dsonar.inclusions='**/*.php'
-            -Dsonar.php.coverage.reportPaths=tests/reports/phpunit.coverage.xml
-            -Dsonar.php.tests.reportPath=tests/reports/phpunit.junit.xml
+            -Dsonar.php.coverage.reportPaths=./src/tests/reports/phpunit.coverage.xml
+            -Dsonar.php.tests.reportPath=./src/tests/reports/phpunit.junit.xml
