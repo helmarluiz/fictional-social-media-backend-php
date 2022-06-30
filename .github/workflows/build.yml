@@ -72,19 +72,24 @@ jobs:
           sed -i 's/\/var\/www\/src\//\/usr\/src\//g' phpunit.coverage.xml
           sed -i 's/\/var\/www\/src\//\/usr\/src\//g' phpunit.junit.xml
 
+
       - name: SonarCloud Scan
-        run: >
-          docker run --volume="$(pwd)/src:/usr/src" --network="host" newtmitch/sonar-scanner sonar-scanner
-          -Dsonar.host.url=https://sonarcloud.io
-          -Dsonar.projectKey=helmarluiz_fictional-social-media-backend-php
-          -Dsonar.projectName=FSM
-          -Dsonar.organization=helmarluiz
-          -Dsonar.php.coverage.reportPaths=tests/reports/phpunit.coverage.xml
-          -Dsonar.php.tests.reportPath=tests/reports/phpunit.junit.xml
-          -Dsonar.language=php
-          -Dsonar.sources=./app
-          -Dsonar.tests=./tests
-          -Dsonar.login=${{ secrets.SONAR_TOKEN }}
-          -Dsonar.scm.disabled=true
-          -Dsonar.exclusions='vendor/**'
-          -Dsonar.inclusions='**/*.php'
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          projectBaseDir: src
+          args: >
+            -Dsonar.projectKey=helmarluiz_fictional-social-media-backend-php
+            -Dsonar.organization=helmarluiz
+            -Dsonar.projectName=FSM
+            -Dsonar.language=php
+            -Dsonar.sources=./app
+            -Dsonar.tests=./tests
+            -Dsonar.verbose=true
+            -Dsonar.scm.disabled=true
+            -Dsonar.exclusions='vendor/**, build/**, node_modules/**'
+            -Dsonar.inclusions='**/*.php'
+            -Dsonar.php.coverage.reportPaths=tests/reports/phpunit.coverage.xml
+            -Dsonar.php.tests.reportPath=tests/reports/phpunit.junit.xml
