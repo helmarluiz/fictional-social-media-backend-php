@@ -27,6 +27,7 @@ Copy .env.example to .env for the following directories:
 Build images and start Docker Containers:
 
     docker-compose up -d --build
+    docker exec fsm-backend composer install
     docker exec fsm-backend /www/install-captainhook.sh
 
 Wait for the containers to be up and running, then run the following command to populate the cache:

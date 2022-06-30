@@ -6,6 +6,9 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
 jobs:
+
+  # TODO: Split steps in different jobs: https://github.com/docker/build-push-action/issues/225#issuecomment-727639184
+
   build-and-tests:
     name: Build and Tests
     runs-on: ubuntu-latest
