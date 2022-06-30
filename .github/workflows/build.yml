@@ -89,7 +89,7 @@ jobs:
             -Dsonar.tests=./tests
             -Dsonar.verbose=true
             -Dsonar.scm.disabled=true
-            -Dsonar.exclusions='vendor/**, build/**, node_modules/**'
+            -Dsonar.exclusions='vendor/**'
             -Dsonar.inclusions='**/*.php'
             -Dsonar.php.coverage.reportPaths=tests/reports/phpunit.coverage.xml
             -Dsonar.php.tests.reportPath=tests/reports/phpunit.junit.xml
