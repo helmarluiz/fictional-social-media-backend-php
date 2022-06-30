@@ -85,11 +85,8 @@ jobs:
             -Dsonar.organization=helmarluiz
             -Dsonar.projectName=FSM
             -Dsonar.language=php
-            -Dsonar.sources=./src/app
-            -Dsonar.tests=./src/tests
-            -Dsonar.verbose=true
+            -Dsonar.sources=./app
+            -Dsonar.tests=./tests
             -Dsonar.scm.disabled=true
-            -Dsonar.exclusions='.src/vendor/**'
-            -Dsonar.inclusions='**/*.php'
-            -Dsonar.php.coverage.reportPaths=./src/tests/reports/phpunit.coverage.xml
-            -Dsonar.php.tests.reportPath=./src/tests/reports/phpunit.junit.xml
+            -Dsonar.php.coverage.reportPaths=./tests/reports/phpunit.coverage.xml
+            -Dsonar.php.tests.reportPath=./tests/reports/phpunit.junit.xml
