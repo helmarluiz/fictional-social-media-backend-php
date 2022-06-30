@@ -69,9 +69,8 @@ jobs:
         working-directory: ./src/tests/reports
         run: |
           echo ${{ github.event.repository.name }}
-          sed -i 's/\/var\/www\/src\//\/usr\/src\//g' phpunit.coverage.xml
-          sed -i 's/\/var\/www\/src\//\/usr\/src\//g' phpunit.junit.xml
-
+          sed -i 's/\/var\/www\/src\//\/github\/workspace\/src\//g' phpunit.coverage.xml
+          sed -i 's/\/var\/www\/src\//\/github\/workspace\/src\//g' phpunit.junit.xml
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
