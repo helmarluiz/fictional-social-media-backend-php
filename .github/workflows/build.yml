@@ -70,7 +70,8 @@ jobs:
 
       - name: Detect coding standard violations
         working-directory: ./src
-        run: vendor/bin/phpcs -q --extensions=php --standard=PSR12 --report=checkstyle app tests | vendor/bin/cs2pr --graceful-warnings
+        run: vendor/bin/phpcs -q --extensions=php --standard=PSR12 \
+        --report=checkstyle app tests | vendor/bin/cs2pr --graceful-warnings
       
 
 #  build-and-tests:
