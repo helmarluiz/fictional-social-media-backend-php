@@ -36,12 +36,6 @@ WORKDIR /var/www/src
 # Copy application Files
 COPY src .
 
-# Install composer dependencies
-RUN composer install
-
-# Set permissions to vendor folder
-RUN chown -R $user:$user /var/www/src/vendor
-
 # Copy git file to be used by Captain Hook
 COPY .git .git
 
