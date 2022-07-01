@@ -46,6 +46,8 @@ jobs:
 
       - name: Configure matchers
         uses: mheap/phpunit-matcher-action@v1
+        with:
+          base_path: ./src
 
       - name: PHPUnit Tests
         uses: php-actions/phpunit@v3
