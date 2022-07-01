@@ -21,7 +21,7 @@ services:
     build:
       args:
         user: www
-        uid: 1000
+        uid: 1001
       context: ./
       dockerfile: docker/dockerfiles/php.dockerfile
     container_name: ${COMPOSE_PROJECT_NAME}-backend
