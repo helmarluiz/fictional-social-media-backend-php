@@ -29,7 +29,7 @@ class SupermetricsApiServiceTest extends TestCase
     {
         $arrayOfPosts = $this->supermetricsApiService->getPaginated(1);
 
-        $this->assertEquals(true, empty($arrayOfPosts), 'List of Posts is Empty');
+        $this->assertEquals(false, empty($arrayOfPosts), 'List of Posts is Empty');
     }
 
     public function testLoadAllPosts()
