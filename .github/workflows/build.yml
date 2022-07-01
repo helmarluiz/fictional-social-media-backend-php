@@ -38,14 +38,39 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
-          name: myimage
-          path: /tmp/fsm-backend.tar
+          name: fsm_backend
+          path: /tmp/fsm_backend.tar
 
       - name: Start all containers
-        run: docker-compose build
+        run: docker-compose up -d
+
+      - name: Install composer
+        run: docker exec fsm-backend composer install
+
+  detect-code-violations:
+    name: Detect Code Violations (phpcs)
+    runs-on: ubuntu-latest
+    environment: master
+    needs: build-and-tests
+    steps:
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: fsm_backend
+          path: /tmp
+
+      - name: Load Docker image
+        run: |
+          docker load --input /tmp/fsm_backend.tar
+          docker image ls -a
 
       - name: Start all containers
-        working-directory: ./src
+        run: docker-compose up -d
+
+      - name: Install composer
         run: docker exec fsm-backend composer install
 
       - name: Detect PHP coding standard violations
