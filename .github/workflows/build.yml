@@ -38,7 +38,7 @@ jobs:
       - name: Install dependencies
         uses: php-actions/composer@v6
         with:
-          args: --working-dir=src --prefer-dist --no-suggest --no-progress
+          args: --working-dir=./src --prefer-dist --no-suggest --no-progress
 #      - name: Install dependencies
 #        working-directory: ./src
 #        run: composer install --prefer-dist --no-suggest --no-progress
