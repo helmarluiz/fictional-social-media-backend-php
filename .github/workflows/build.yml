@@ -48,10 +48,16 @@ jobs:
         uses: mheap/phpunit-matcher-action@v1
 
       - name: PHPUnit Tests
-        working-directory: ./src
-        run: > 
-          XDEBUG_MODE=coverage vendor/bin/phpunit --teamcity --coverage-clover=src/test-reports/phpunit.coverage.xml 
-          --log-junit=src/test-reports/phpunit.junit.xml
+        uses: php-actions/phpunit@v3
+        env:
+          XDEBUG_MODE: coverage
+        with:
+          php_version: 8.1
+          version: latest
+          bootstrap: src/vendor/autoload.php
+          php_extensions: xdebug
+          configuration: src/phpunit.xml
+          args: --teamcity --coverage-clover=src/test-reports/phpunit.coverage.xml --log-junit=src/test-reports/phpunit.junit.xml
 
       - name: Create test-reports artifacts
         uses: actions/upload-artifact@master
