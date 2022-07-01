@@ -35,6 +35,9 @@ jobs:
       - name: Start all containers
         run: docker-compose up -d
 
+      - name: Start all containers
+        run: docker exec fsm-backend composer install
+
       - name: Detect PHP coding standard violations
         run: |
           docker exec fsm-backend bash -c "vendor/bin/phpcs \
