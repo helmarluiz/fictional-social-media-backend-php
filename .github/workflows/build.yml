@@ -65,7 +65,7 @@ jobs:
           name: test-reports
           path: src/test-reports
 
-  php-unit:
+  php-psr-12-validation:
     runs-on: ubuntu-latest
     needs: composer
     steps:
@@ -81,52 +81,38 @@ jobs:
         working-directory: ./src
         run: >
           vendor/bin/phpcs -q --extensions=php --standard=PSR12 --report=checkstyle app tests | vendor/bin/cs2pr --graceful-warnings
-      
 
 #  build-and-tests:
-#    name: Tests PHPUnit
+#    name: Build and Tests
 #    runs-on: ubuntu-latest
 #    environment: master
 #    steps:
 #      - name: Checkout Code
 #        uses: actions/checkout@v2
 #
-#      - name: Setup PHP
-#        uses: shivammathur/setup-php@v2
-#        with:
-#          php-version: '8.1'
-#          tools: composer, cs2pr
+#      - name: Copy environment Files
+#        run: |
+#          cp .env.example .env
+#          cp src/.env.example src/.env
 #
-#      - name: Get composer cache directory
-#        id: composer-cache
-#        working-directory: ./src
-#        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+#      - name: Pull docker images
+#        run: docker-compose pull
 #
-#      - name: Cache dependencies
-#        uses: actions/cache@v3
+#      # Load or store Docker image in cache
+#      - uses: satackey/action-docker-layer-caching@v0.0.11
+#        continue-on-error: true
 #        with:
-#          path: ${{ steps.composer-cache.outputs.dir }}
-#          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-##          restore-keys: ${{ runner.os }}-composer-/
+#          key: ${{ runner.os }}-foo-docker-cache-${{ hashFiles('docker-compose.yml') }}
+#          restore-keys: ${{ runner.os }}-foo-docker-cache-${{ hashFiles('docker-compose.yml') }}
 #
-#      - name: Install dependencies
-#        uses: php-actions/composer@v6
-#        with:
-#          args: --working-dir=./src --prefer-dist --no-progress
-##      - name: Install dependencies
-##        working-directory: ./src
-##        run: composer install --prefer-dist --no-suggest --no-progress
+#      - name: Start all containers
+#        run: docker-compose up -d
+#      - name: PHPUnit tests
+#        run: |
+#          docker exec fsm-backend bash -c "XDEBUG_MODE=coverage vendor/bin/phpunit \
+#          --coverage-clover=tests/reports/phpunit.coverage.xml --log-junit=tests/reports/phpunit.junit.xml"
 
-#
-#      - name: Configure matchers # Add annotations to your PHPUnit tests
-#        uses: mheap/phpunit-matcher-action@v1
 
-#      - name: Create test-reports artifacts
-#        uses: actions/upload-artifact@master
-#        with:
-#          name: test-reports
-#          path: src/test-reports
-#
   sonarcloud:
     name: SonarCloud Scanner
     runs-on: ubuntu-latest
