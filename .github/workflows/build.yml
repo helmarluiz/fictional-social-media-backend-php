@@ -32,6 +32,15 @@ jobs:
           key: ${{ runner.os }}-foo-docker-cache-${{ hashFiles('docker-compose.yml') }}
           restore-keys: ${{ runner.os }}-foo-docker-cache-${{ hashFiles('docker-compose.yml') }}
 
+      - name: Save docker image
+        run: docker save -o /tmp/fsm-backend.tar fsm-backend
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: myimage
+          path: /tmp/fsm-backend.tar
+
       - name: Start all containers
         run: docker-compose up -d
 
