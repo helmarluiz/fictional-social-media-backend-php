@@ -10,84 +10,65 @@ jobs:
   # TODO: Split steps in different jobs: https://github.com/docker/build-push-action/issues/225#issuecomment-727639184
 
   build-and-tests:
-    name: Build and Tests
+    name: Tests PHPUnit
     runs-on: ubuntu-latest
     environment: master
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
 
-      - name: Copy environment Files
-        run: |
-          cp .env.example .env
-          cp src/.env.example src/.env
-
-      - name: Pull docker images
-        run: docker-compose pull
-
-      # Load or store Docker image in cache
-      - uses: satackey/action-docker-layer-caching@v0.0.11
-        continue-on-error: true
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
         with:
-          key: ${{ runner.os }}-foo-docker-cache-${{ hashFiles('docker-compose.yml') }}
-          restore-keys: ${{ runner.os }}-foo-docker-cache-${{ hashFiles('docker-compose.yml') }}
+          php-version: '8.1'
+          tools: composer, cs2pr
 
-      - name: Save docker image
-        run: docker save -o /tmp/fsm-backend.tar fsm_backend
+      - name: Get composer cache directory
+        id: composer-cache
+        working-directory: ./src
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v2
+      - name: Cache dependencies
+        uses: actions/cache@v3
         with:
-          name: fsm_backend
-          path: /tmp/fsm_backend.tar
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+#          restore-keys: ${{ runner.os }}-composer-/
 
-      - name: Start all containers
-        run: docker-compose up -d
+      - uses: php-actions/composer@v6
 
-      - name: Install composer
-        run: docker exec fsm-backend composer install
+#      - name: Install dependencies
+#        working-directory: ./src
+#        run: composer install --prefer-dist --no-suggest --no-progress
 
-  detect-code-violations:
-    name: Detect Code Violations (phpcs)
-    runs-on: ubuntu-latest
-    environment: master
-    needs: build-and-tests
-    steps:
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+      - name: Detect coding standard violations
+        working-directory: ./src
+        run: |
+          ls -la vendor/bin/
+          vendor/bin/phpcs -q --extensions=php --standard=PSR12 \
+             --report=checkstyle app tests | vendor/bin/cs2pr --graceful-warnings
 
-      - name: Download artifact
-        uses: actions/download-artifact@v2
+
+      - name: Configure matchers # Add annotations to your PHPUnit tests
+        uses: mheap/phpunit-matcher-action@v1
+
+      - name: PHPUnit Tests
+        uses: php-actions/phpunit@v3
+        env:
+          XDEBUG_MODE: coverage
         with:
-          name: fsm_backend
-          path: /tmp
+          php_version: 8.1
+          version: latest
+          bootstrap: src/vendor/autoload.php
+          php_extensions: xdebug
+          configuration: src/phpunit.xml
+          args: --coverage-clover=src/test-reports/phpunit.coverage.xml --log-junit=src/test-reports/phpunit.junit.xml
 
-      - name: Load Docker image
-        run: |
-          docker load --input /tmp/fsm_backend.tar
-          docker image ls -a
-
-      - name: Start all containers
-        run: docker-compose up -d
-
-      - name: Install composer
-        run: docker exec fsm-backend composer install
-
-      - name: Detect PHP coding standard violations
-        run: |
-          docker exec fsm-backend bash -c "vendor/bin/phpcs \
-          -q --extensions=php --standard=PSR12 --report=checkstyle app tests | vendor/bin/cs2pr --graceful-warnings"
-
-      - name: PHPUnit tests
-        run: |
-          docker exec fsm-backend bash -c "XDEBUG_MODE=coverage vendor/bin/phpunit \
-          --coverage-clover=tests/reports/phpunit.coverage.xml --log-junit=tests/reports/phpunit.junit.xml"
-
-      - name: Create PHPUnit report artifacts
+      - name: Create test-reports artifacts
         uses: actions/upload-artifact@master
         with:
           name: test-reports
-          path: src/tests/reports
+          path: src/test-reports
 
   sonarcloud:
     name: SonarCloud Scanner
