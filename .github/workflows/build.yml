@@ -6,53 +6,135 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
 jobs:
-  build-and-tests:
-    name: Build and Tests
+
+  # TODO: Split steps in different jobs: https://github.com/docker/build-push-action/issues/225#issuecomment-727639184
+  composer:
     runs-on: ubuntu-latest
-    environment: master
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-      - name: Copy environment Files
-        run: |
-          cp .env.example .env
-          cp src/.env.example src/.env
-
-      - name: Pull docker images
-        run: docker-compose pull
-
-      # Load or store Docker image in cache
-      - uses: satackey/action-docker-layer-caching@v0.0.11
-        continue-on-error: true
+      - name: Cache Composer dependencies
+        uses: actions/cache@v3
         with:
-          key: ${{ runner.os }}-foo-docker-cache-${{ hashFiles('docker-compose.yml') }}
-          restore-keys: ${{ runner.os }}-foo-docker-cache-${{ hashFiles('docker-compose.yml') }}
+          path: /tmp/composer-cache
+          key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
 
-      - name: Start all containers
-        run: docker-compose up -d
+      - uses: php-actions/composer@v6
+        with:
+          args: --working-dir=./src --prefer-dist --no-progress
 
-      - name: Detect PHP coding standard violations
-        run: |
-          docker exec fsm-backend bash -c "vendor/bin/phpcs \
-          -q --extensions=php --standard=PSR12 --report=checkstyle app tests | vendor/bin/cs2pr --graceful-warnings"
+      - name: Archive build
+        run: mkdir /tmp/github-actions/ && tar -cvf /tmp/github-actions/build.tar ./
 
-      - name: PHPUnit tests
-        run: |
-          docker exec fsm-backend bash -c "XDEBUG_MODE=coverage vendor/bin/phpunit \
-          --coverage-clover=tests/reports/phpunit.coverage.xml --log-junit=tests/reports/phpunit.junit.xml"
+      - name: Upload build archive for test runners
+        uses: actions/upload-artifact@v2
+        with:
+          name: build-artifact
+          path: /tmp/github-actions
 
-      - name: Create PHPUnit report artifacts
+  php-unit-tests:
+    runs-on: ubuntu-latest
+    needs: composer
+    steps:
+      - uses: actions/download-artifact@v2
+        with:
+          name: build-artifact
+          path: /tmp/github-actions
+
+      - name: Extract build archive
+        run: tar -xvf /tmp/github-actions/build.tar ./
+
+      - name: Configure matchers
+        uses: mheap/phpunit-matcher-action@v1
+        with:
+          base_path: ./src
+
+      - name: PHPUnit Tests
+        uses: php-actions/phpunit@v3
+        env:
+          XDEBUG_MODE: coverage
+        with:
+          php_version: 8.1
+          version: latest
+          bootstrap: src/vendor/autoload.php
+          php_extensions: xdebug
+          configuration: src/phpunit.xml
+          args: --teamcity --coverage-clover=src/test-reports/phpunit.coverage.xml --log-junit=src/test-reports/phpunit.junit.xml
+
+      - name: Create test-reports artifacts
         uses: actions/upload-artifact@master
         with:
           name: test-reports
-          path: src/tests/reports
+          path: src/test-reports
+
+  php-psr-12-validation:
+    runs-on: ubuntu-latest
+    needs: composer
+    steps:
+      - uses: actions/download-artifact@v2
+        with:
+          name: build-artifact
+          path: /tmp/github-actions
+
+      - name: Extract build archive
+        run: tar -xvf /tmp/github-actions/build.tar ./
+
+      - name: Detect coding standard violations
+        working-directory: ./src
+        run: >
+          vendor/bin/phpcs -q --extensions=php --standard=PSR12 --report=checkstyle app tests | vendor/bin/cs2pr --graceful-warnings
+
+  phpstan:
+    runs-on: ubuntu-latest
+    needs: composer
+    steps:
+      - uses: actions/download-artifact@v2
+        with:
+          name: build-artifact
+          path: /tmp/github-actions
+
+      - name: Extract build archive
+        run: tar -xvf /tmp/github-actions/build.tar ./
+
+      - name: Detect coding standard violations
+        working-directory: ./src
+        run: composer static-analyse
+#  feature-tests:
+#    name: Build and Tests
+#    runs-on: ubuntu-latest
+#    environment: master
+#    steps:
+#      - name: Checkout Code
+#        uses: actions/checkout@v2
+#
+#      - name: Copy environment Files
+#        run: |
+#          cp .env.example .env
+#          cp src/.env.example src/.env
+#
+#      - name: Pull docker images
+#        run: docker-compose pull
+#
+#      # Load or store Docker image in cache
+#      - uses: satackey/action-docker-layer-caching@v0.0.11
+#        continue-on-error: true
+#        with:
+#          key: ${{ runner.os }}-foo-docker-cache-${{ hashFiles('docker-compose.yml') }}
+#          restore-keys: ${{ runner.os }}-foo-docker-cache-${{ hashFiles('docker-compose.yml') }}
+#
+#      - name: Start all containers
+#        run: docker-compose up -d
+#      - name: PHPUnit tests
+#        run: |
+#          docker exec fsm-backend bash -c "XDEBUG_MODE=coverage vendor/bin/phpunit \
+#          --coverage-clover=tests/reports/phpunit.coverage.xml --log-junit=tests/reports/phpunit.junit.xml"
+
 
   sonarcloud:
     name: SonarCloud Scanner
     runs-on: ubuntu-latest
     environment: master
-    needs: build-and-tests
+    needs: php-unit-tests
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
@@ -69,9 +151,8 @@ jobs:
         working-directory: ./src/tests/reports
         run: |
           echo ${{ github.event.repository.name }}
-          sed -i 's/\/var\/www\/src\//\/usr\/src\//g' phpunit.coverage.xml
-          sed -i 's/\/var\/www\/src\//\/usr\/src\//g' phpunit.junit.xml
-
+          sed -i 's/\/var\/www\/src\//\/github\/workspace\/src\//g' phpunit.coverage.xml
+          sed -i 's/\/var\/www\/src\//\/github\/workspace\/src\//g' phpunit.junit.xml
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
@@ -87,9 +168,6 @@ jobs:
             -Dsonar.language=php
             -Dsonar.sources=./app
             -Dsonar.tests=./tests
-            -Dsonar.verbose=true
             -Dsonar.scm.disabled=true
-            -Dsonar.exclusions='vendor/**'
-            -Dsonar.inclusions='**/*.php'
-            -Dsonar.php.coverage.reportPaths=tests/reports/phpunit.coverage.xml
-            -Dsonar.php.tests.reportPath=tests/reports/phpunit.junit.xml
+            -Dsonar.php.coverage.reportPaths=./tests/reports/phpunit.coverage.xml
+            -Dsonar.php.tests.reportPath=./tests/reports/phpunit.junit.xml
