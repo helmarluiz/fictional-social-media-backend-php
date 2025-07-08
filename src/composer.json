@@ -36,14 +36,18 @@
     }
   ],
   "scripts": {
-    "cs:fix": [
-      "NelsonMartell\\PhpCodeSniffer\\ComposerScripts::phpcbf"
-    ],
-    "cs:lint": [
-      "vendor/bin/phpcs --extensions=php -q --standard=PSR12"
-    ],
+    "cs:fix": "NelsonMartell\\PhpCodeSniffer\\ComposerScripts::phpcbf",
+    "cs:lint": "vendor/bin/phpcs --extensions=php -q --standard=PSR12",
     "static-analyse": "./vendor/bin/phpstan analyse --level 5 app config tests",
     "tests": "vendor/bin/phpunit --colors=always --testdox --verbose tests/",
-    "install-hooks": "vendor/bin/captainhook install --git-directory=../.git --configuration=captainhook.json"
+    "install-hooks": "vendor/bin/captainhook install --configuration=captainhook.json --git-directory=../.git",
+    "quality:phploc": "docker run --platform linux/amd64 --rm -v \"$PWD\":/app -w /app adamculp/php-code-quality:latest php /usr/local/lib/php-code-quality/vendor/bin/phploc --exclude vendor . > logs/phploc.txt",
+    "quality:phpmd": "docker run --platform linux/amd64 --rm -v \"$PWD\":/app -w /app adamculp/php-code-quality:latest php /usr/local/lib/php-code-quality/vendor/bin/phpmd . xml codesize,cleancode,controversial,design,naming,unusedcode --exclude 'vendor' --reportfile logs/phpmd_results.xml",
+    "quality:phpmetrics": "docker run --platform linux/amd64 --rm -v \"$PWD\":/app -w /app adamculp/php-code-quality:latest php /usr/local/lib/php-code-quality/vendor/bin/phpmetrics --excluded-dirs 'vendor' --report-html=logs/metrics_results .",
+    "quality:all": [
+      "@quality:phploc",
+      "@quality:phpmd",
+      "@quality:phpmetrics"
+    ]
   }
 }

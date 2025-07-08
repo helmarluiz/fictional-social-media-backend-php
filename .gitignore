@@ -5,11 +5,11 @@
 .env
 
 # Docker files
-docker/configs/sonarqube/data
-docker/configs/sonarqube/extensions
-docker/configs/sonarqube/logs
-docker/configs/sonarqube/temp
-docker/configs/sonarqube/log
+docker/sonarqube/data
+docker/sonarqube/extensions
+docker/sonarqube/logs
+docker/sonarqube/temp
+docker/sonarqube/log
 
 # PHPUnit files
 .phpunit.result.cache

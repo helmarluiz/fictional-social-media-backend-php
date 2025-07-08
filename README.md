@@ -26,6 +26,63 @@ This project is a hands-on educational endeavor, emphasizing the use of PHP 8.1 
 - **php_codesniffer**: Ensures adherence to PSR-12 coding standards.
 - **vlucas/phpdotenv**: Manages environment variables.
 
+## Code Quality Tools
+
+This project includes several Docker-based code quality tools accessible via Composer scripts. All tools run in isolated Docker containers and generate reports in the `src/logs/` directory.
+
+### Available Quality Tools
+
+#### Individual Tools
+
+- **PHPLoc** - A tool for quickly measuring the size of a PHP project.
+
+  ```bash
+  cd src
+  composer run quality:phploc
+  ```
+
+  Generates: `logs/phploc.txt`
+
+  Generates: `logs/phpmd_results.xml`
+
+- **PhpMetrics** - Static analysis with HTML reports
+  ```bash
+  cd src
+  composer run quality:phpmetrics
+  ```
+  Generates: `logs/metrics_results/` (HTML report)
+
+#### Run All Quality Checks
+
+To execute all code quality tools at once:
+
+```bash
+cd src
+composer run quality:all
+```
+
+### Prerequisites
+
+1. **Docker**: All tools run in Docker containers using `adamculp/php-code-quality:latest`
+2. **Logs Directory**: Create the logs directory first:
+   ```bash
+   mkdir -p src/logs
+   ```
+
+### Platform Notes
+
+- **Apple Silicon Macs**: The Docker commands include `--platform linux/amd64` to avoid platform warnings
+- **Intel/AMD64 systems**: The platform flag is included for consistency but not strictly necessary
+
+### Other Quality Commands
+
+- **Code Style Fixing**: `composer run cs:fix`
+- **Code Style Linting**: `composer run cs:lint`
+- **Local Static Analysis**: `composer run static-analyse` (uses local vendor)
+- **Unit Tests**: `composer run tests`
+
+All Docker-based quality tools exclude the `vendor` directory and provide detailed analysis reports for continuous code improvement.
+
 ### Application Setup
 
 Clone the repository and run the following commands:
@@ -70,8 +127,26 @@ The hooks will automatically run on every commit to ensure code quality.
     - [ ] Integrate PHPUnit with the mutation testing tool InfectionPHP, to validade all tests.
     - [ ] Improve code documentation.
 
-# Running tests
+# Running Tests and Code Quality
 
-```
+## Unit Tests
+
+```bash
 docker exec php-news-backend vendor/bin/phpunit
+```
+
+Or using composer scripts:
+
+```bash
+cd src
+composer run tests
+```
+
+## Code Quality Analysis
+
+For comprehensive code quality analysis, see the [Code Quality Tools](#code-quality-tools) section above. You can run individual tools or all quality checks at once:
+
+```bash
+cd src
+composer run quality:all
 ```

@@ -1,24 +1,24 @@
 version: "3.7"
 services:
-  #  db-mysql:
-  #    platform: linux/amd64
-  #    image: mysql:8.0.33
-  #    container_name: ${COMPOSE_PROJECT_NAME}-db-mysql
-  #    command: --default-authentication-plugin=mysql_native_password
-  #    restart: always
-  #    environment:
-  #      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-  #    volumes:
-  #      - ./docker/configs/mysql/init/schema.sql:/docker-entrypoint-initdb.d/1.sql
-  #      - ./docker/configs/mysql/my.cnf:/etc/mysql/my.cnf
-  #    networks:
-  #      - php-news-backend
+  db-mysql:
+    platform: linux/amd64
+    image: mysql:8.0.33
+    container_name: ${COMPOSE_PROJECT_NAME}-db-mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - ./docker/mysql/init/schema.sql:/docker-entrypoint-initdb.d/1.sql
+      - ./docker/mysql/my.cnf:/etc/mysql/my.cnf
+    networks:
+      - php-news-backend
 
   backend:
-    #    depends_on:
-    #      - db-mysql
+    depends_on:
+      - db-mysql
     environment:
-      - PHP_IDE_CONFIG=serverName=dofroscra
+      - PHP_IDE_CONFIG=serverName=php-news
     build:
       args:
         user: www
@@ -32,7 +32,6 @@ services:
       - 9003:9000
     restart: unless-stopped
     volumes:
-      - .git:/var/www/src/.git
       - ./src:/var/www/src
       - /var/www/src/vendor
     networks:
@@ -67,23 +66,10 @@ services:
 #      SONAR_JDBC_USERNAME: sonarqube
 #      SONAR_JDBC_PASSWORD: sonarqube
 #    volumes:
-#      - ./docker/configs/sonarqube/data:/opt/sonarqube/data
-#      - ./docker/configs/sonarqube/extensions:/opt/sonarqube/extensions
-#      - ./docker/configs/sonarqube/logs:/opt/sonarqube/logs
-#      - ./docker/configs/sonarqube/temp:/opt/sonarqube/temp
-#
-#  db:
-#    image: postgres
-#    networks:
-#      - php-news-backend
-#    environment:
-#      POSTGRES_USER: sonarqube
-#      POSTGRES_PASSWORD: sonarqube
-#    volumes:
-##      - postgresql:/var/lib/postgresql
-#      # This needs explicit mapping due to
-#      # https://github.com/docker-library/postgres/blob/4e48e3228a30763913ece952c611e5e9b95c8759/Dockerfile.template#L52
-#      - ./docker/configs/postgresql/data:/var/lib/postgresql/data
+#      - ./docker/sonarqube/data:/opt/sonarqube/data
+#      - ./docker/sonarqube/extensions:/opt/sonarqube/extensions
+#      - ./docker/sonarqube/logs:/opt/sonarqube/logs
+#      - ./docker/sonarqube/temp:/opt/sonarqube/temp
 
 networks:
   php-news-backend:

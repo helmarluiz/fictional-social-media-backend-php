@@ -1,8 +1,8 @@
 -- SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));
 
-DROP DATABASE IF EXISTS fsm;
-CREATE DATABASE fsm;
-USE fsm;
+DROP DATABASE IF EXISTS php-news;
+CREATE DATABASE php-news;
+USE php-news;
 
 CREATE TABLE posts
 (
