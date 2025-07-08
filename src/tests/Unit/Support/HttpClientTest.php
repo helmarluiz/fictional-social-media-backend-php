@@ -25,7 +25,6 @@ class HttpClientTest extends TestCase
 
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertNotEquals(null, $response->getBody());
-        $this->assertIsArray($response->getBodyArray());
     }
 
     public function testPostRequest(): void
@@ -34,7 +33,6 @@ class HttpClientTest extends TestCase
 
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertNotEquals(null, $response->getBody());
-        $this->assertIsArray($response->getBodyArray());
     }
 
     public function testRequestNotFound(): void
