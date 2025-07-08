@@ -41,11 +41,11 @@ Copy .env.example to .env for the following directories:
 Build images and start Docker Containers:
 
     docker-compose up -d --build
-    docker exec fsm-backend /www/install-captainhook.sh
+    docker exec php-news-backend /www/install-captainhook.sh
 
 Wait for the containers to be up and running, then run the following command to populate the cache:
 
-    docker exec fsm-backend php /var/www/backend/app/Commands/Cache.php
+    docker exec php-news-backend php /var/www/backend/app/Commands/Cache.php
 
 # TODO:
 
@@ -55,5 +55,5 @@ Wait for the containers to be up and running, then run the following command to 
 # Running tests
 
 ```
-docker exec fsm-backend vendor/bin/phpunit
+docker exec php-news-backend vendor/bin/phpunit
 ```

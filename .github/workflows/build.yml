@@ -34,12 +34,12 @@ jobs:
 
       - name: Detect PHP coding standard violations
         run: |
-          docker exec fsm-backend bash -c "vendor/bin/phpcs \
+          docker exec php-news-backend bash -c "vendor/bin/phpcs \
           -q --extensions=php --standard=PSR12 --report=checkstyle app tests | vendor/bin/cs2pr --graceful-warnings"
 
       - name: PHPUnit tests
         run: |
-          docker exec fsm-backend bash -c "XDEBUG_MODE=coverage vendor/bin/phpunit \
+          docker exec php-news-backend bash -c "XDEBUG_MODE=coverage vendor/bin/phpunit \
           --coverage-clover=tests/reports/phpunit.coverage.xml --log-junit=tests/reports/phpunit.junit.xml"
 
       - name: Create PHPUnit report artifacts
@@ -57,7 +57,7 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v2
         with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+          fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
 
       - name: Download PHPUnit report artifacts
         uses: actions/download-artifact@master
@@ -72,7 +72,6 @@ jobs:
           sed -i 's/\/var\/www\/src\//\/usr\/src\//g' phpunit.coverage.xml
           sed -i 's/\/var\/www\/src\//\/usr\/src\//g' phpunit.junit.xml
 
-
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
@@ -83,7 +82,7 @@ jobs:
           args: >
             -Dsonar.projectKey=helmarluiz_fictional-social-media-backend-php
             -Dsonar.organization=helmarluiz
-            -Dsonar.projectName=FSM
+            -Dsonar.projectName=php-news
             -Dsonar.language=php
             -Dsonar.sources=./app
             -Dsonar.tests=./tests

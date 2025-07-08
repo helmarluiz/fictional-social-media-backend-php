@@ -1,4 +1,4 @@
-FROM php:8.1-fpm
+FROM php:8.4-fpm
 
 # Arguments defined in docker-compose.yml
 ARG user
@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install -y curl zip unzip
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Copy xdebug ini file
-COPY docker/configs/php/xdebug.ini "${PHP_INI_DIR}/conf.d"
+COPY docker/php/xdebug.ini "${PHP_INI_DIR}/conf.d"
 
 # Install xdebug
 RUN pecl install xdebug
@@ -51,7 +51,7 @@ RUN chown -R $user:$user .git
 RUN chown -R $user:$user /var/www/src/tests/reports
 
 # Copy install captainhook shell scrit and set permission
-COPY docker/configs/php/install-captainhook.sh /$user/install-captainhook.sh
+COPY docker/php/install-captainhook.sh /$user/install-captainhook.sh
 RUN chmod +x /$user/install-captainhook.sh;
 
 USER $user

@@ -8,5 +8,5 @@ cd /var/www/src/
     --configuration="captainhook.json" \
     --git-directory=".git" \
     --run-mode="docker" \
-    --run-exec="docker exec -w /var/www/src fsm-backend" \
+    --run-exec="docker exec -w /var/www/src php-news-backend" \
     --run-path="vendor/bin/captainhook"

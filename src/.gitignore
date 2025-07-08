@@ -5,3 +5,10 @@ vendor/
 .env
 
 .scannerwork
+
+# Cache files
+*.cache
+
+# Other files
+.DS_Store
+.env.local
