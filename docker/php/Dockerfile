@@ -41,17 +41,7 @@ RUN composer install
 
 # Set permissions to vendor folder
 RUN chown -R $user:$user /var/www/src/vendor
-
-# Copy git file to be used by Captain Hook
-COPY .git .git
-
-# Set permissions to .git folder
-RUN chown -R $user:$user .git
-
+ 
 RUN chown -R $user:$user /var/www/src/tests/reports
-
-# Copy install captainhook shell scrit and set permission
-COPY docker/php/install-captainhook.sh /$user/install-captainhook.sh
-RUN chmod +x /$user/install-captainhook.sh;
 
 USER $user

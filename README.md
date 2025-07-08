@@ -47,6 +47,24 @@ Wait for the containers to be up and running, then run the following command to 
 
     docker exec php-news-backend php /var/www/backend/app/Commands/Cache.php
 
+### Installing Git Hooks (CaptainHook)
+
+After setting up the project, install the git hooks for code quality checks:
+
+```bash
+cd src
+composer run install-hooks
+```
+
+This will install CaptainHook git hooks that will:
+
+- Validate commit messages (conventional commits)
+- Run PHP linting on staged files
+- Execute code style fixes and checks
+- Perform static analysis
+
+The hooks will automatically run on every commit to ensure code quality.
+
 # TODO:
 
     - [ ] Integrate PHPUnit with the mutation testing tool InfectionPHP, to validade all tests.
