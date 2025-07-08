@@ -44,6 +44,6 @@
     ],
     "static-analyse": "./vendor/bin/phpstan analyse --level 5 app config tests > ./logs/phpstan_results.txt",
     "tests": "vendor/bin/phpunit --colors=always --testdox --verbose tests/",
-    "install-hooks": "vendor/bin/captainhook install --configuration=captainhook.json"
+    "install-hooks": "vendor/bin/captainhook install --git-directory=../.git --configuration=captainhook.json"
   }
 }
