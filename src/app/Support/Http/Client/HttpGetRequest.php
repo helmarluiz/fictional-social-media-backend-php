@@ -21,7 +21,7 @@ class HttpGetRequest extends ClientRequestBase
 
         /* Set an options for cURL transfer */
         curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 
         /* Set Header Option */
         if ($this->getRequestHeaders()) {

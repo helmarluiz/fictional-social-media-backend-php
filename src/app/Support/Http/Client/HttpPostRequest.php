@@ -19,8 +19,8 @@ class HttpPostRequest extends ClientRequestBase
 
         /* Set an options for cURL transfer */
         curl_setopt($curl, CURLOPT_URL, $this->getRequestUrl());
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($curl, CURLOPT_POST, 1);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_POST, true);
         curl_setopt($curl, CURLOPT_POSTFIELDS, $this->getRequestParameters());
 
         /* Set Header Option */
